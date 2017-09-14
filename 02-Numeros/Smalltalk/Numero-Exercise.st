@@ -252,42 +252,6 @@ Numero subclass: #Entero
 	poolDictionaries: ''
 	category: 'Numero-Exercise'!
 
-!Entero methodsFor: 'value' stamp: 'HernanWilkinson 5/7/2016 21:02'!
-integerValue
-
-	"Usamos integerValue en vez de value para que no haya problemas con el mensaje value implementado en Object - Hernan"
-	
-	^value! !
-
-
-!Entero methodsFor: 'testing' stamp: 'rb 9/13/2017 00:47:38'!
-isOne
-	
-	^false! !
-
-!Entero methodsFor: 'testing' stamp: 'rb 9/13/2017 00:47:43'!
-isZero
-	
-	^false! !
-
-
-!Entero methodsFor: 'comparing' stamp: 'rb 9/12/2017 20:03:43'!
-= anObject
-
-	^ anObject isEqualToInteger: self! !
-
-!Entero methodsFor: 'comparing' stamp: 'HernanWilkinson 5/7/2016 20:17'!
-hash
-
-	^value hash! !
-
-
-!Entero methodsFor: 'initialization' stamp: 'HernanWilkinson 5/7/2016 20:09'!
-initalizeWith: aValue 
-	
-	value := aValue! !
-
-
 !Entero methodsFor: 'arithmetic operations' stamp: 'rb 9/13/2017 00:48:15'!
 * aMultiplier 
 	
@@ -364,6 +328,42 @@ multiplyFraction: aFraction
 multiplyInteger: anInteger
 
 	^self class with: value * anInteger integerValue! !
+
+
+!Entero methodsFor: 'comparing' stamp: 'rb 9/12/2017 20:03:43'!
+= anObject
+
+	^ anObject isEqualToInteger: self! !
+
+!Entero methodsFor: 'comparing' stamp: 'HernanWilkinson 5/7/2016 20:17'!
+hash
+
+	^value hash! !
+
+
+!Entero methodsFor: 'initialization' stamp: 'HernanWilkinson 5/7/2016 20:09'!
+initalizeWith: aValue 
+	
+	value := aValue! !
+
+
+!Entero methodsFor: 'testing' stamp: 'rb 9/13/2017 00:47:38'!
+isOne
+	
+	^false! !
+
+!Entero methodsFor: 'testing' stamp: 'rb 9/13/2017 00:47:43'!
+isZero
+	
+	^false! !
+
+
+!Entero methodsFor: 'value' stamp: 'HernanWilkinson 5/7/2016 21:02'!
+integerValue
+
+	"Usamos integerValue en vez de value para que no haya problemas con el mensaje value implementado en Object - Hernan"
+	
+	^value! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -540,110 +540,113 @@ Numero subclass: #One
 	poolDictionaries: ''
 	category: 'Numero-Exercise'!
 
-!One methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 00:37:59'!
+!One methodsFor: 'arithmetic operations' stamp: 'rb 9/13/2017 00:37:59'!
 * aMultiplier 
 	
 	^aMultiplier! !
 
-!One methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 00:41:12'!
+!One methodsFor: 'arithmetic operations' stamp: 'rb 9/13/2017 00:41:12'!
 + anAdder 
 	
 	^ anAdder addOne: self.! !
 
-!One methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 00:41:57'!
+!One methodsFor: 'arithmetic operations' stamp: 'rb 9/13/2017 00:41:57'!
 / aDivisor
 	
 	^ aDivisor divideOne: self.! !
 
-!One methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 01:06:51'!
+!One methodsFor: 'arithmetic operations' stamp: 'rb 9/13/2017 01:06:51'!
 // aDivisor 
 	
 	^Entero with: 1 // aDivisor integerValue! !
 
-!One methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 00:56:01'!
-= aNumber
-
-	^aNumber integerValue = 1! !
-
-!One methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 00:43:29'!
+!One methodsFor: 'arithmetic operations' stamp: 'rb 9/13/2017 00:43:29'!
 addFraction: aFraction
 
 	^aFraction addInteger: self! !
 
-!One methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 01:06:40'!
+!One methodsFor: 'arithmetic operations' stamp: 'rb 9/13/2017 01:06:40'!
 addInteger: anInteger
 
 	^Entero with: 1 + anInteger integerValue! !
 
-!One methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 00:58:49'!
+!One methodsFor: 'arithmetic operations' stamp: 'rb 9/13/2017 00:58:49'!
 addOne: aOne
 
 	^Entero with: 2! !
 
-!One methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 01:44:07'!
-checkDenominator
-	
-	 self error: 'una fraccion no puede tener denominador 1 porque sino es un entero' ! !
-
-!One methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 00:44:56'!
+!One methodsFor: 'arithmetic operations' stamp: 'rb 9/13/2017 00:44:56'!
 divideFraction: aFraction
 
 	^aFraction! !
 
-!One methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 00:45:10'!
+!One methodsFor: 'arithmetic operations' stamp: 'rb 9/13/2017 00:45:10'!
 divideInteger: anInteger
 
 	^anInteger! !
 
-!One methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 01:05:35'!
+!One methodsFor: 'arithmetic operations' stamp: 'rb 9/13/2017 01:05:35'!
 divideOne: aOne
 
 	^self! !
 
-!One methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 01:05:45'!
+!One methodsFor: 'arithmetic operations' stamp: 'rb 9/13/2017 01:05:45'!
 greatestCommonDivisorWith: anEntero 
 	
 	^self! !
 
-!One methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 00:46:20'!
-hash
-
-	^1 hash! !
-
-!One methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 00:42:41'!
-integerValue
-	
-	^ 1! !
-
-!One methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 00:46:55'!
-isEqualToFraction: aFraction
-
-	^ aFraction numerator = aFraction denominator.! !
-
-!One methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 00:47:30'!
-isEqualToInteger: anInteger
-
-	^ anInteger integerValue = 1! !
-
-!One methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 01:02:10'!
-isOne
-
-	^true! !
-
-!One methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 01:02:15'!
-isZero
-	
-	^false! !
-
-!One methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 00:49:14'!
+!One methodsFor: 'arithmetic operations' stamp: 'rb 9/13/2017 00:49:14'!
 multiplyFraction: aFraction
 
 	^aFraction! !
 
-!One methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 00:49:26'!
+!One methodsFor: 'arithmetic operations' stamp: 'rb 9/13/2017 00:49:26'!
 multiplyInteger: anInteger
 
 	^anInteger! !
+
+
+!One methodsFor: 'comparing' stamp: 'rb 9/13/2017 00:56:01'!
+= aNumber
+
+	^aNumber integerValue = 1! !
+
+!One methodsFor: 'comparing' stamp: 'rb 9/13/2017 00:46:20'!
+hash
+
+	^1 hash! !
+
+!One methodsFor: 'comparing' stamp: 'rb 9/13/2017 00:46:55'!
+isEqualToFraction: aFraction
+
+	^ aFraction numerator = aFraction denominator.! !
+
+!One methodsFor: 'comparing' stamp: 'rb 9/13/2017 00:47:30'!
+isEqualToInteger: anInteger
+
+	^ anInteger integerValue = 1! !
+
+
+!One methodsFor: 'testing' stamp: 'rb 9/13/2017 01:44:07'!
+checkDenominator
+	
+	 self error: 'una fraccion no puede tener denominador 1 porque sino es un entero' ! !
+
+!One methodsFor: 'testing' stamp: 'rb 9/13/2017 01:02:10'!
+isOne
+
+	^true! !
+
+!One methodsFor: 'testing' stamp: 'rb 9/13/2017 01:02:15'!
+isZero
+	
+	^false! !
+
+
+!One methodsFor: 'value' stamp: 'rb 9/13/2017 00:42:41'!
+integerValue
+	
+	^ 1! !
 
 
 !classDefinition: #Zero category: #'Numero-Exercise'!
@@ -653,107 +656,115 @@ Numero subclass: #Zero
 	poolDictionaries: ''
 	category: 'Numero-Exercise'!
 
-!Zero methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 01:05:06'!
+!Zero methodsFor: 'arithmetic operations' stamp: 'rb 9/13/2017 01:05:06'!
 * aMultiplicator
 
 	^self! !
 
-!Zero methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 00:51:11'!
+!Zero methodsFor: 'arithmetic operations' stamp: 'rb 9/13/2017 00:51:11'!
 + anAdder
 
 	^anAdder! !
 
-!Zero methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 01:05:00'!
+!Zero methodsFor: 'arithmetic operations' stamp: 'rb 9/13/2017 01:05:00'!
 / aDivisor
 	
 	^self! !
 
-!Zero methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 01:05:09'!
+!Zero methodsFor: 'arithmetic operations' stamp: 'rb 9/13/2017 01:05:09'!
 // aDivisor 
 	
 	^self! !
 
-!Zero methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 00:56:32'!
-= anObject
-
-	^anObject integerValue = 0! !
-
-!Zero methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 00:53:17'!
+!Zero methodsFor: 'arithmetic operations' stamp: 'rb 9/13/2017 00:53:17'!
 addFraction: aFraction
 
 	^aFraction! !
 
-!Zero methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 00:53:30'!
+!Zero methodsFor: 'arithmetic operations' stamp: 'rb 9/13/2017 00:53:30'!
 addInteger: anInteger
 
 	^anInteger! !
 
-!Zero methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 01:43:11'!
-checkDenominator
+!Zero methodsFor: 'arithmetic operations' stamp: 'rb 9/14/2017 17:46:39'!
+addOne: aOne
 
-	self error: 'una fraccion no puede tener denominador cero'! !
+	^One new.! !
 
-!Zero methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 01:43:00'!
-checkNumerator
-
-	self error: 'una fraccion no puede ser cero'! !
-
-!Zero methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 01:31:46'!
+!Zero methodsFor: 'arithmetic operations' stamp: 'rb 9/13/2017 01:31:46'!
 divideFraction: aFraction
 
 	self error: Numero canNotDivideByZeroErrorDescription! !
 
-!Zero methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 01:31:53'!
+!Zero methodsFor: 'arithmetic operations' stamp: 'rb 9/13/2017 01:31:53'!
 divideInteger: anInteger
 
 	self error: Numero canNotDivideByZeroErrorDescription! !
 
-!Zero methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 01:31:57'!
+!Zero methodsFor: 'arithmetic operations' stamp: 'rb 9/13/2017 01:31:57'!
 divideOne: aOne
 
 	self error: Numero canNotDivideByZeroErrorDescription! !
 
-!Zero methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 00:54:55'!
+!Zero methodsFor: 'arithmetic operations' stamp: 'rb 9/13/2017 00:54:55'!
 greatestCommonDivisorWith: anEntero 
 	
 	^anEntero! !
 
-!Zero methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 00:55:04'!
-hash
-
-	^0 hash! !
-
-!Zero methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 00:55:12'!
-integerValue
-
-	^0! !
-
-!Zero methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 00:55:26'!
-isEqualToFraction: aFraction
-
-	^false! !
-
-!Zero methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 00:55:36'!
-isEqualToInteger: anInteger
-
-	^false! !
-
-!Zero methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 00:56:46'!
-isOne
-
-	^false! !
-
-!Zero methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 00:56:51'!
-isZero
-	
-	^true! !
-
-!Zero methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 01:04:42'!
+!Zero methodsFor: 'arithmetic operations' stamp: 'rb 9/13/2017 01:04:42'!
 multiplyFraction: aFraction
 
 	^self! !
 
-!Zero methodsFor: 'as yet unclassified' stamp: 'rb 9/13/2017 01:04:39'!
+!Zero methodsFor: 'arithmetic operations' stamp: 'rb 9/13/2017 01:04:39'!
 multiplyInteger: anInteger
 
 	^self! !
+
+
+!Zero methodsFor: 'comparing' stamp: 'rb 9/13/2017 00:56:32'!
+= anObject
+
+	^anObject integerValue = 0! !
+
+!Zero methodsFor: 'comparing' stamp: 'rb 9/13/2017 00:55:04'!
+hash
+
+	^0 hash! !
+
+!Zero methodsFor: 'comparing' stamp: 'rb 9/13/2017 00:55:26'!
+isEqualToFraction: aFraction
+
+	^false! !
+
+!Zero methodsFor: 'comparing' stamp: 'rb 9/13/2017 00:55:36'!
+isEqualToInteger: anInteger
+
+	^false! !
+
+
+!Zero methodsFor: 'testing' stamp: 'rb 9/13/2017 01:43:11'!
+checkDenominator
+
+	self error: 'una fraccion no puede tener denominador cero'! !
+
+!Zero methodsFor: 'testing' stamp: 'rb 9/13/2017 01:43:00'!
+checkNumerator
+
+	self error: 'una fraccion no puede ser cero'! !
+
+!Zero methodsFor: 'testing' stamp: 'rb 9/13/2017 00:56:46'!
+isOne
+
+	^false! !
+
+!Zero methodsFor: 'testing' stamp: 'rb 9/13/2017 00:56:51'!
+isZero
+	
+	^true! !
+
+
+!Zero methodsFor: 'value' stamp: 'rb 9/13/2017 00:55:12'!
+integerValue
+
+	^0! !
