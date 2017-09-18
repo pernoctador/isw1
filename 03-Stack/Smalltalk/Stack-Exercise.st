@@ -144,17 +144,35 @@ Object subclass: #OOStack
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!OOStack methodsFor: 'Stack operations' stamp: 'rb 9/15/2017 10:09:57'!
-initialize
-	top := BaseStack new.! !
-
-!OOStack methodsFor: 'Stack operations' stamp: 'rb 9/14/2017 18:15:45'!
+!OOStack methodsFor: 'stack info' stamp: 'rb 9/14/2017 18:15:45'!
 isEmpty
 	^top isEmpty
 
 	! !
 
-!OOStack methodsFor: 'Stack operations' stamp: 'rb 9/14/2017 18:33:01'!
+!OOStack methodsFor: 'stack info' stamp: 'rb 9/14/2017 18:36:08'!
+size
+	^top index.! !
+
+
+!OOStack methodsFor: 'initialize' stamp: 'rb 9/15/2017 10:09:57'!
+initialize
+	top := BaseStack new.! !
+
+
+!OOStack methodsFor: 'accessing' stamp: 'rb 9/14/2017 18:33:30'!
+stackObjectAtTop
+	^top
+	! !
+
+!OOStack methodsFor: 'accessing' stamp: 'rb 9/14/2017 18:32:11'!
+top
+	^top stackValue.
+
+	! !
+
+
+!OOStack methodsFor: 'modifying' stamp: 'rb 9/14/2017 18:33:01'!
 pop
 	| previousTop |
 	previousTop := self top.
@@ -163,24 +181,9 @@ pop
 
 	! !
 
-!OOStack methodsFor: 'Stack operations' stamp: 'rb 9/15/2017 10:10:16'!
+!OOStack methodsFor: 'modifying' stamp: 'rb 9/15/2017 10:10:16'!
 push: anObject
 	top := ElementStack with: anObject after: self stackObjectAtTop.
-
-	! !
-
-!OOStack methodsFor: 'Stack operations' stamp: 'rb 9/14/2017 18:36:08'!
-size
-	^top index.! !
-
-!OOStack methodsFor: 'Stack operations' stamp: 'rb 9/14/2017 18:33:30'!
-stackObjectAtTop
-	^top
-	! !
-
-!OOStack methodsFor: 'Stack operations' stamp: 'rb 9/14/2017 18:32:11'!
-top
-	^top stackValue.
 
 	! !
 
@@ -203,20 +206,21 @@ Object subclass: #ObjectStack
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!ObjectStack methodsFor: 'Element operations' stamp: 'rb 9/15/2017 10:14:36'!
-index
-	self subclassResponsibility ! !
-
-!ObjectStack methodsFor: 'Element operations' stamp: 'rb 9/15/2017 10:15:07'!
+!ObjectStack methodsFor: 'accessing' stamp: 'rb 9/15/2017 10:15:07'!
 previousStackElement
 	self subclassResponsibility ! !
 
-!ObjectStack methodsFor: 'Element operations' stamp: 'rb 9/15/2017 10:15:10'!
+!ObjectStack methodsFor: 'accessing' stamp: 'rb 9/15/2017 10:15:10'!
 stackValue
 	self subclassResponsibility ! !
 
 
-!ObjectStack methodsFor: 'Stack operations' stamp: 'rb 9/15/2017 10:14:42'!
+!ObjectStack methodsFor: 'position' stamp: 'rb 9/15/2017 10:14:36'!
+index
+	self subclassResponsibility ! !
+
+
+!ObjectStack methodsFor: 'stack info' stamp: 'rb 9/15/2017 10:14:42'!
 isEmpty
 	self subclassResponsibility ! !
 
@@ -228,20 +232,21 @@ ObjectStack subclass: #BaseStack
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!BaseStack methodsFor: 'Element operations' stamp: 'rb 9/14/2017 18:35:42'!
-index
-	^0! !
-
-!BaseStack methodsFor: 'Element operations' stamp: 'rb 9/15/2017 10:13:24'!
+!BaseStack methodsFor: 'accessing' stamp: 'rb 9/15/2017 10:13:24'!
 previousStackElement
 	self error: OOStack stackEmptyErrorDescription! !
 
-!BaseStack methodsFor: 'Element operations' stamp: 'rb 9/15/2017 10:13:34'!
+!BaseStack methodsFor: 'accessing' stamp: 'rb 9/15/2017 10:13:34'!
 stackValue
 	self error: OOStack stackEmptyErrorDescription! !
 
 
-!BaseStack methodsFor: 'Stack operations' stamp: 'rb 9/14/2017 18:09:49'!
+!BaseStack methodsFor: 'position' stamp: 'rb 9/14/2017 18:35:42'!
+index
+	^0! !
+
+
+!BaseStack methodsFor: 'stack info' stamp: 'rb 9/14/2017 18:09:49'!
 isEmpty
 	^true! !
 
@@ -253,26 +258,28 @@ ObjectStack subclass: #ElementStack
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!ElementStack methodsFor: 'Element operations' stamp: 'rb 9/14/2017 18:35:33'!
-index
-	^index! !
-
-!ElementStack methodsFor: 'Element operations' stamp: 'rb 9/14/2017 18:35:58'!
+!ElementStack methodsFor: 'initialize' stamp: 'rb 9/14/2017 18:35:58'!
 initializeWith: anObject after: aStackObject
 	value := anObject.
 	previousStackElement := aStackObject.
 	index := aStackObject index + 1.! !
 
-!ElementStack methodsFor: 'Element operations' stamp: 'rb 9/14/2017 18:26:32'!
+
+!ElementStack methodsFor: 'accessing' stamp: 'rb 9/14/2017 18:26:32'!
 previousStackElement
 	^previousStackElement! !
 
-!ElementStack methodsFor: 'Element operations' stamp: 'rb 9/14/2017 18:29:22'!
+!ElementStack methodsFor: 'accessing' stamp: 'rb 9/14/2017 18:29:22'!
 stackValue
 	^value! !
 
 
-!ElementStack methodsFor: 'Stack operations' stamp: 'rb 9/14/2017 18:17:35'!
+!ElementStack methodsFor: 'position' stamp: 'rb 9/14/2017 18:35:33'!
+index
+	^index! !
+
+
+!ElementStack methodsFor: 'stack info' stamp: 'rb 9/14/2017 18:17:35'!
 isEmpty
 	^false! !
 
