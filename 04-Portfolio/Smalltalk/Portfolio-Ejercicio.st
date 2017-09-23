@@ -403,49 +403,80 @@ balance
 
 !classDefinition: #Portfolio category: #'Portfolio-Ejercicio'!
 SummarizingAccount subclass: #Portfolio
-	instanceVariableNames: ''
+	instanceVariableNames: 'firstAccount secondAccount'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Portfolio-Ejercicio'!
 
-!Portfolio methodsFor: 'balance' stamp: 'HernanWilkinson 7/13/2011 18:39'!
+!Portfolio methodsFor: 'balance' stamp: 'rb 9/22/2017 01:12:15'!
 balance
 
-	self shouldBeImplemented ! !
+	^firstAccount balance + secondAccount balance! !
 
 
-!Portfolio methodsFor: 'testing' stamp: 'HernanWilkinson 7/13/2011 18:39'!
+!Portfolio methodsFor: 'testing' stamp: 'rb 9/22/2017 01:42:59'!
 manages: anAccount
 
-		self shouldBeImplemented 
+	^ (firstAccount manages: anAccount) or: (secondAccount manages: anAccount) or: (firstAccount = anAccount) or: (secondAccount = anAccount).
 ! !
 
-!Portfolio methodsFor: 'testing' stamp: 'HernanWilkinson 7/13/2011 18:39'!
-registers: aTtransaction
+!Portfolio methodsFor: 'testing' stamp: 'rb 9/22/2017 01:22:38'!
+registers: aTransaction
 
-	self shouldBeImplemented ! !
+	^ (firstAccount registers: aTransaction) or: (secondAccount registers: aTransaction).! !
 
 
-!Portfolio methodsFor: 'transactions' stamp: 'HernanWilkinson 7/13/2011 18:39'!
+!Portfolio methodsFor: 'transactions' stamp: 'rb 9/22/2017 15:43:57'!
 transactions 
+	
+	| answer |
+	
+	answer := OrderedCollection new.
+	answer := firstAccount transactions copy.
+	answer addAllLast: secondAccount transactions copy.
 
-	self shouldBeImplemented ! !
+	^ answer! !
 
-!Portfolio methodsFor: 'transactions' stamp: 'HernanWilkinson 7/13/2011 18:40'!
+!Portfolio methodsFor: 'transactions' stamp: 'rb 9/22/2017 15:48:30'!
 transactionsOf: anAccount 
+	
+	self assert: [self manages: anAccount] description: 
+	[self error: Portfolio accountNotManagedMessageDescription].
 
-	self shouldBeImplemented ! !
+	^ anAccount transactions.! !
+
+!Portfolio methodsFor: 'transactions' stamp: 'rb 9/22/2017 15:56:22'!
+with: anAccount1 with: anAccount2
+	
+	self assert: [(anAccount1 = anAccount2) not] description: 
+	[self error: Portfolio accountAlreadyManagedErrorMessage ].
+	
+	self assert: [((anAccount1 manages: anAccount2) or: (anAccount2 manages: anAccount1)) not] description: 
+	[self error: Portfolio accountAlreadyManagedErrorMessage ].
+
+	firstAccount := anAccount1.
+	secondAccount := anAccount2 .! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'Portfolio class' category: #'Portfolio-Ejercicio'!
 Portfolio class
-	instanceVariableNames: ''!
+	instanceVariableNames: 'firstAccount secondAccount'!
 
-!Portfolio class methodsFor: 'instance creation' stamp: 'HernanWilkinson 7/13/2011 18:41'!
+!Portfolio class methodsFor: 'instance creation' stamp: 'rb 9/22/2017 15:50:29'!
+accountAlreadyManagedErrorMessage
+	
+	^'El Portfolio seleccionado ya maneja esa cuenta'.! !
+
+!Portfolio class methodsFor: 'instance creation' stamp: 'rb 9/22/2017 15:49:30'!
+accountNotManagedMessageDescription
+	
+	^'El Portfolio seleccionado no maneja esa cuenta'.! !
+
+!Portfolio class methodsFor: 'instance creation' stamp: 'rb 9/22/2017 01:10:47'!
 with: anAccount1 with: anAccount2
-
-	self shouldBeImplemented ! !
+	
+	^Portfolio new with: anAccount1 with: anAccount2! !
 
 !Portfolio class methodsFor: 'instance creation' stamp: 'HernanWilkinson 7/13/2011 18:41'!
 withAll: aCollectionOfAccounts
