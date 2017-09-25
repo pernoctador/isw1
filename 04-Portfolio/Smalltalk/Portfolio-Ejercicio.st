@@ -444,14 +444,8 @@ transactionsOf: anAccount
 
 	^ anAccount transactions.! !
 
-!Portfolio methodsFor: 'transactions' stamp: 'rb 9/22/2017 15:56:22'!
+!Portfolio methodsFor: 'transactions' stamp: 'rb 9/25/2017 16:13:28'!
 with: anAccount1 with: anAccount2
-	
-	self assert: [(anAccount1 = anAccount2) not] description: 
-	[self error: Portfolio accountAlreadyManagedErrorMessage ].
-	
-	self assert: [((anAccount1 manages: anAccount2) or: (anAccount2 manages: anAccount1)) not] description: 
-	[self error: Portfolio accountAlreadyManagedErrorMessage ].
 
 	firstAccount := anAccount1.
 	secondAccount := anAccount2 .! !
@@ -462,15 +456,40 @@ with: anAccount1 with: anAccount2
 Portfolio class
 	instanceVariableNames: 'firstAccount secondAccount'!
 
-!Portfolio class methodsFor: 'instance creation' stamp: 'rb 9/22/2017 01:10:47'!
+!Portfolio class methodsFor: 'instance creation' stamp: 'rb 9/25/2017 16:13:21'!
 with: anAccount1 with: anAccount2
+
+	self assert: [(anAccount1 = anAccount2) not] description: 
+	[self error: Portfolio accountAlreadyManagedErrorMessage ].
+	
+	self assert: [((anAccount1 manages: anAccount2) or: (anAccount2 manages: anAccount1)) not] description: 
+	[self error: Portfolio accountAlreadyManagedErrorMessage ].
 	
 	^Portfolio new with: anAccount1 with: anAccount2! !
 
-!Portfolio class methodsFor: 'instance creation' stamp: 'HernanWilkinson 7/13/2011 18:41'!
+!Portfolio class methodsFor: 'instance creation' stamp: 'rb 9/25/2017 16:14:42'!
 withAll: aCollectionOfAccounts
-
-	self shouldBeImplemented ! !
+	| accountCollection firstElement secondElement lastPortfolio |
+	
+	self assert: [aCollectionOfAccounts size > 1] description: 
+	[self error: Portfolio portfolioShouldManageMoreThanOneAccount ].
+	
+	accountCollection := aCollectionOfAccounts.
+	firstElement := accountCollection first.
+	accountCollection remove: firstElement.
+	secondElement := accountCollection first.
+	accountCollection remove: secondElement.
+	lastPortfolio := self with: firstElement with: secondElement.
+	
+	[accountCollection size > 0] whileTrue:[
+		firstElement := accountCollection first.
+		accountCollection remove: firstElement.
+		lastPortfolio := self with: firstElement with: lastPortfolio.].
+	
+	^lastPortfolio
+		
+	
+	! !
 
 
 !Portfolio class methodsFor: 'error' stamp: 'rb 9/22/2017 15:50:29'!
@@ -482,6 +501,11 @@ accountAlreadyManagedErrorMessage
 accountNotManagedMessageDescription
 	
 	^'El Portfolio seleccionado no maneja esa cuenta'.! !
+
+!Portfolio class methodsFor: 'error' stamp: 'rb 9/25/2017 16:15:14'!
+portfolioShouldManageMoreThanOneAccount
+	
+	^'No se puede crear un Portfolio con solo una cuenta'.! !
 
 
 !classDefinition: #ReceptiveAccount category: #'Portfolio-Ejercicio'!
