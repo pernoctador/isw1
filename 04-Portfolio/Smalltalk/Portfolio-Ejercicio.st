@@ -426,15 +426,14 @@ registers: aTransaction
 	^ (firstAccount registers: aTransaction) or: (secondAccount registers: aTransaction).! !
 
 
-!Portfolio methodsFor: 'transactions' stamp: 'rb 9/22/2017 15:43:57'!
+!Portfolio methodsFor: 'transactions' stamp: 'rb 9/24/2017 21:31:57'!
 transactions 
 	
 	| answer |
 	
-	answer := OrderedCollection new.
-	answer := firstAccount transactions copy.
-	answer addAllLast: secondAccount transactions copy.
-
+	answer := ((OrderedCollection new) addAllLast: firstAccount transactions).
+	answer addAllLast: secondAccount transactions.
+	
 	^ answer! !
 
 !Portfolio methodsFor: 'transactions' stamp: 'rb 9/22/2017 15:48:30'!
@@ -463,16 +462,6 @@ with: anAccount1 with: anAccount2
 Portfolio class
 	instanceVariableNames: 'firstAccount secondAccount'!
 
-!Portfolio class methodsFor: 'instance creation' stamp: 'rb 9/22/2017 15:50:29'!
-accountAlreadyManagedErrorMessage
-	
-	^'El Portfolio seleccionado ya maneja esa cuenta'.! !
-
-!Portfolio class methodsFor: 'instance creation' stamp: 'rb 9/22/2017 15:49:30'!
-accountNotManagedMessageDescription
-	
-	^'El Portfolio seleccionado no maneja esa cuenta'.! !
-
 !Portfolio class methodsFor: 'instance creation' stamp: 'rb 9/22/2017 01:10:47'!
 with: anAccount1 with: anAccount2
 	
@@ -482,6 +471,17 @@ with: anAccount1 with: anAccount2
 withAll: aCollectionOfAccounts
 
 	self shouldBeImplemented ! !
+
+
+!Portfolio class methodsFor: 'error' stamp: 'rb 9/22/2017 15:50:29'!
+accountAlreadyManagedErrorMessage
+	
+	^'El Portfolio seleccionado ya maneja esa cuenta'.! !
+
+!Portfolio class methodsFor: 'error' stamp: 'rb 9/22/2017 15:49:30'!
+accountNotManagedMessageDescription
+	
+	^'El Portfolio seleccionado no maneja esa cuenta'.! !
 
 
 !classDefinition: #ReceptiveAccount category: #'Portfolio-Ejercicio'!
