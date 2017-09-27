@@ -403,7 +403,7 @@ test27ShouldBeAbleToBeQueryTransferNetWithCertificateOfDeposit
 	self assert: 150 = (self accountTransferNetOf: fromAccount).
 	self assert: -150 = (self accountTransferNetOf: toAccount).! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'HernanWilkinson 9/26/2011 16:29'!
+!PortfolioTest methodsFor: 'tests' stamp: 'rb 9/27/2017 18:25:35'!
 test28PortfolioTreePrinterPrintsTheCompositeInDepthFirstOrder
 
 	| account1 account2 account3 complexPortfolio composedPortfolio accountNames lines |
@@ -425,10 +425,10 @@ test28PortfolioTreePrinterPrintsTheCompositeInDepthFirstOrder
 		
 	self assert: 5 = lines size.
 	self assert: 'composedPortfolio' = (lines at: 1).
-	self assert: ' complexPortfolio' = (lines at: 2).
-	self assert: '  account1' = (lines at: 3).
-	self assert: '  account2' = (lines at: 4).
-	self assert: ' account3' = (lines at: 5).! !
+	self assert: 'complexPortfolio' = (lines at: 2).
+	self assert: 'account1' = (lines at: 3).
+	self assert: 'account2' = (lines at: 4).
+	self assert: 'account3' = (lines at: 5).! !
 
 !PortfolioTest methodsFor: 'tests' stamp: 'HernanWilkinson 9/26/2011 16:30'!
 test29ReversePortfolioTreePrinterPrintsTheCompositeStartingFromTheLeaves
@@ -478,10 +478,10 @@ investmentNetOf: aReceptiveAccount
 	
 	^ aReceptiveAccount investmentNet! !
 
-!PortfolioTest methodsFor: 'test support' stamp: 'HernanWilkinson 9/6/2016 19:43'!
+!PortfolioTest methodsFor: 'test support' stamp: 'rb 9/27/2017 16:35:58'!
 portofolioTreeOf: aPortfolio namingAccountWith: aDictionary 
 	
-	self shouldBeImplemented ! !
+	^aPortfolio printPortfolioTreeWithNames: aDictionary.! !
 
 !PortfolioTest methodsFor: 'test support' stamp: 'HernanWilkinson 9/6/2016 19:43'!
 reversePortofolioTreeOf: aPortfolio namingAccountWith: aDictionary 
@@ -798,6 +798,19 @@ balance
 	^ accounts sum: [ :account | account balance ]
 ! !
 
+!Portfolio methodsFor: 'transactions' stamp: 'rb 9/27/2017 18:24:30'!
+printAccountWithName: aDictionary over: aCollection
+	| print |
+	print := aCollection.
+	print add: (aDictionary at: self).
+	accounts from: 1 to: accounts size do: [:anAccount | anAccount printAccountWithName: aDictionary over: print].
+	^print! !
+
+!Portfolio methodsFor: 'transactions' stamp: 'rb 9/27/2017 12:55:59'!
+printPortfolioTreeWithNames: aDictionary
+
+	^ self printAccountWithName: aDictionary over: OrderedCollection new.! !
+
 !Portfolio methodsFor: 'transactions' stamp: 'HernanWilkinson 7/13/2011 19:23'!
 transactions 
 
@@ -906,6 +919,13 @@ investmentEarnings
 investmentNet
 
 	^ transactions inject: 0 into: [ :balance :transfer | balance + transfer investmentValue]! !
+
+!ReceptiveAccount methodsFor: 'transactions' stamp: 'rb 9/27/2017 16:53:41'!
+printAccountWithName: aDictionary over: aCollection
+	| print |
+	print := aCollection.
+	print add: (aDictionary at: self).
+	^print! !
 
 !ReceptiveAccount methodsFor: 'transactions' stamp: 'rb 9/26/2017 18:11:49'!
 printTransactions 
