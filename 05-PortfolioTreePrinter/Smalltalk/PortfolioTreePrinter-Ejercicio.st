@@ -463,20 +463,20 @@ accountSummaryLinesOf: aReceptiveAccount
 	
 	^ aReceptiveAccount printTransactions! !
 
-!PortfolioTest methodsFor: 'test support' stamp: 'HernanWilkinson 9/6/2016 19:43'!
+!PortfolioTest methodsFor: 'test support' stamp: 'rb 9/26/2017 23:29:15'!
 accountTransferNetOf: aReceptiveAccount 
 	
-	self shouldBeImplemented ! !
+	^ aReceptiveAccount transferNet! !
 
-!PortfolioTest methodsFor: 'test support' stamp: 'HernanWilkinson 9/6/2016 19:43'!
+!PortfolioTest methodsFor: 'test support' stamp: 'rb 9/27/2017 00:49:15'!
 investmentEarningsOf: aReceptiveAccount 
 	
-	self shouldBeImplemented ! !
+	^aReceptiveAccount investmentEarnings! !
 
-!PortfolioTest methodsFor: 'test support' stamp: 'HernanWilkinson 9/6/2016 19:43'!
+!PortfolioTest methodsFor: 'test support' stamp: 'rb 9/27/2017 00:04:59'!
 investmentNetOf: aReceptiveAccount 
 	
-	self shouldBeImplemented ! !
+	^ aReceptiveAccount investmentNet! !
 
 !PortfolioTest methodsFor: 'test support' stamp: 'HernanWilkinson 9/6/2016 19:43'!
 portofolioTreeOf: aPortfolio namingAccountWith: aDictionary 
@@ -495,6 +495,26 @@ Object subclass: #AccountTransaction
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PortfolioTreePrinter-Ejercicio'!
+
+!AccountTransaction methodsFor: 'evaluating' stamp: 'rb 9/27/2017 00:17:09'!
+integralValue
+	
+	self subclassResponsibility ! !
+
+!AccountTransaction methodsFor: 'evaluating' stamp: 'rb 9/27/2017 00:47:38'!
+investmentEarnings
+	
+	^0 ! !
+
+!AccountTransaction methodsFor: 'evaluating' stamp: 'rb 9/27/2017 00:17:34'!
+investmentValue
+	
+	^0 ! !
+
+!AccountTransaction methodsFor: 'evaluating' stamp: 'rb 9/27/2017 00:17:28'!
+transferValue
+	
+	^0 ! !
 
 !AccountTransaction methodsFor: 'evaluating' stamp: 'HernanWilkinson 7/14/2011 06:48'!
 value
@@ -520,10 +540,55 @@ register: aValue on: account
 
 !classDefinition: #CertificateOfDeposit category: #'PortfolioTreePrinter-Ejercicio'!
 AccountTransaction subclass: #CertificateOfDeposit
-	instanceVariableNames: 'value tna numberOfDays account'
+	instanceVariableNames: 'value tna numberOfDays account duration rate'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PortfolioTreePrinter-Ejercicio'!
+
+!CertificateOfDeposit methodsFor: 'as yet unclassified' stamp: 'rb 9/27/2017 00:27:40'!
+duration
+	^duration ! !
+
+!CertificateOfDeposit methodsFor: 'as yet unclassified' stamp: 'rb 9/27/2017 00:21:34'!
+initializeFor: aValue during: aPeriod at: aRate
+	value := aValue.
+	duration := aPeriod.
+	rate := aRate .! !
+
+!CertificateOfDeposit methodsFor: 'as yet unclassified' stamp: 'rb 9/27/2017 00:23:48'!
+integralValue
+	^(value * -1) ! !
+
+!CertificateOfDeposit methodsFor: 'as yet unclassified' stamp: 'rb 9/27/2017 00:59:00'!
+investmentEarnings
+	^ self investmentValue * self rate/36000 * self duration! !
+
+!CertificateOfDeposit methodsFor: 'as yet unclassified' stamp: 'rb 9/27/2017 00:22:09'!
+investmentValue
+	^value ! !
+
+!CertificateOfDeposit methodsFor: 'as yet unclassified' stamp: 'rb 9/27/2017 00:57:56'!
+printTransaction
+	| myString |
+	myString := String new.
+	myString :=  'Plazo fijo por ', self investmentValue asString, ' durante ', self duration asString, ' dias a una tna de ', self rate asString,'%'.
+	^myString! !
+
+!CertificateOfDeposit methodsFor: 'as yet unclassified' stamp: 'rb 9/27/2017 00:57:49'!
+rate
+	^ 100 * rate ! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'CertificateOfDeposit class' category: #'PortfolioTreePrinter-Ejercicio'!
+CertificateOfDeposit class
+	instanceVariableNames: ''!
+
+!CertificateOfDeposit class methodsFor: 'initialization' stamp: 'rb 9/27/2017 00:20:32'!
+register: aValue during: aPeriod at: aRate on: aReceptiveAccount 
+	| CertificateOfDeposit |
+	CertificateOfDeposit := self new initializeFor: aValue during: aPeriod at: aRate.
+	aReceptiveAccount register: CertificateOfDeposit.! !
 
 
 !classDefinition: #Deposit category: #'PortfolioTreePrinter-Ejercicio'!
@@ -576,6 +641,56 @@ register: aValue on: account
 	account register: withdraw.
 		
 	^ withdraw! !
+
+
+!classDefinition: #Transfer category: #'PortfolioTreePrinter-Ejercicio'!
+AccountTransaction subclass: #Transfer
+	instanceVariableNames: 'value sourceAccount targetAccount'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'PortfolioTreePrinter-Ejercicio'!
+
+!Transfer methodsFor: 'as yet unclassified' stamp: 'rb 9/26/2017 20:26:42'!
+initializeFor: aValue from: anAccount
+	value := aValue * (-1).! !
+
+!Transfer methodsFor: 'as yet unclassified' stamp: 'rb 9/26/2017 20:26:46'!
+initializeFor: aValue to: anotherAccount
+	value := aValue.! !
+
+!Transfer methodsFor: 'as yet unclassified' stamp: 'rb 9/26/2017 20:27:01'!
+integralValue
+	^value.! !
+
+!Transfer methodsFor: 'as yet unclassified' stamp: 'rb 9/26/2017 18:13:10'!
+printTransaction
+	| myString |
+	myString := String new.
+	myString :=  'Transferencia por ',self integralValue asString.
+	^myString! !
+
+!Transfer methodsFor: 'as yet unclassified' stamp: 'rb 9/27/2017 00:22:43'!
+transferValue
+	^value.! !
+
+!Transfer methodsFor: 'as yet unclassified' stamp: 'rb 9/26/2017 17:14:08'!
+value
+	^value! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Transfer class' category: #'PortfolioTreePrinter-Ejercicio'!
+Transfer class
+	instanceVariableNames: ''!
+
+!Transfer class methodsFor: 'as yet unclassified' stamp: 'rb 9/26/2017 20:25:59'!
+register: aValue from: anAccount to: anotherAccount
+	
+	| transferFrom transferTo |
+	transferFrom := self new initializeFor: aValue from: anAccount.
+	transferTo := self new initializeFor: aValue to: anotherAccount.
+	anAccount register: transferFrom.
+	anotherAccount register: transferTo.! !
 
 
 !classDefinition: #Withdraw category: #'PortfolioTreePrinter-Ejercicio'!
@@ -777,10 +892,20 @@ initialize
 	transactions := OrderedCollection new.! !
 
 
-!ReceptiveAccount methodsFor: 'transactions' stamp: 'rb 9/26/2017 16:35:49'!
+!ReceptiveAccount methodsFor: 'transactions' stamp: 'rb 9/26/2017 23:35:43'!
 balance
 
 	^ transactions inject: 0 into: [ :balance :transaction | balance + transaction integralValue]! !
+
+!ReceptiveAccount methodsFor: 'transactions' stamp: 'rb 9/27/2017 00:47:27'!
+investmentEarnings
+
+	^ transactions inject: 0 into: [ :balance :transfer | balance + transfer investmentEarnings]! !
+
+!ReceptiveAccount methodsFor: 'transactions' stamp: 'rb 9/27/2017 00:18:12'!
+investmentNet
+
+	^ transactions inject: 0 into: [ :balance :transfer | balance + transfer investmentValue]! !
 
 !ReceptiveAccount methodsFor: 'transactions' stamp: 'rb 9/26/2017 18:11:49'!
 printTransactions 
@@ -800,6 +925,11 @@ transactions
 
 	^ transactions copy! !
 
+!ReceptiveAccount methodsFor: 'transactions' stamp: 'rb 9/27/2017 00:22:53'!
+transferNet
+
+	^ transactions inject: 0 into: [ :balance :transfer | balance + transfer transferValue]! !
+
 
 !ReceptiveAccount methodsFor: 'testing' stamp: 'HernanWilkinson 7/13/2011 18:37'!
 manages: anAccount
@@ -807,51 +937,8 @@ manages: anAccount
 	^ self = anAccount 
 ! !
 
-!ReceptiveAccount methodsFor: 'testing' stamp: 'HernanWilkinson 7/13/2011 18:37'!
-registers: aTtransaction
+!ReceptiveAccount methodsFor: 'testing' stamp: 'rb 9/27/2017 00:18:33'!
+registers: aTransaction
 
-	^ transactions includes: aTtransaction 
+	^ transactions includes: aTransaction 
 ! !
-
-
-!classDefinition: #Transfer category: #'PortfolioTreePrinter-Ejercicio'!
-Object subclass: #Transfer
-	instanceVariableNames: 'value sourceAccount targetAccount from to'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'PortfolioTreePrinter-Ejercicio'!
-
-!Transfer methodsFor: 'as yet unclassified' stamp: 'rb 9/26/2017 17:17:36'!
-initializeFor: aValue
-	value := aValue.! !
-
-!Transfer methodsFor: 'as yet unclassified' stamp: 'rb 9/26/2017 18:07:08'!
-integralValue
-	^(value * (-1)).! !
-
-!Transfer methodsFor: 'as yet unclassified' stamp: 'rb 9/26/2017 18:13:10'!
-printTransaction
-	| myString |
-	myString := String new.
-	myString :=  'Transferencia por ',self integralValue asString.
-	^myString! !
-
-!Transfer methodsFor: 'as yet unclassified' stamp: 'rb 9/26/2017 17:14:08'!
-value
-	^value! !
-
-"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
-
-!classDefinition: 'Transfer class' category: #'PortfolioTreePrinter-Ejercicio'!
-Transfer class
-	instanceVariableNames: ''!
-
-!Transfer class methodsFor: 'as yet unclassified' stamp: 'rb 9/26/2017 17:41:04'!
-register: aValue from: anAccount to: anotherAccount
-	
-	| transfer |
-	transfer := self new initializeFor: aValue.
-	anAccount register: transfer.
-	anotherAccount register: transfer.
-		
-	^ transfer! !
