@@ -5,6 +5,20 @@ Error subclass: #ElevatorEmergency
 	poolDictionaries: ''
 	category: 'Elevator-Ejercicio'!
 
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'ElevatorEmergency class' category: #'Elevator-Ejercicio'!
+ElevatorEmergency class
+	instanceVariableNames: ''!
+
+!ElevatorEmergency class methodsFor: 'as yet unclassified' stamp: 'rb 10/4/2017 20:58:48'!
+cabinError
+	^ElevatorEmergency new signal: 'Sensor de cabina desincronizado'! !
+
+!ElevatorEmergency class methodsFor: 'as yet unclassified' stamp: 'rb 10/4/2017 20:59:28'!
+doorError
+	^ElevatorEmergency new signal: 'Sensor de puerta desincronizado'! !
+
 
 !classDefinition: #ElevatorTest category: #'Elevator-Ejercicio'!
 TestCase subclass: #ElevatorTest
@@ -613,16 +627,6 @@ openCabinDoor! !
 waitForPeopleTimedOut
 	self subclassResponsibility ! !
 
-"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
-
-!classDefinition: 'ElevatorStatus class' category: #'Elevator-Ejercicio'!
-ElevatorStatus class
-	instanceVariableNames: ''!
-
-!ElevatorStatus class methodsFor: 'as yet unclassified' stamp: 'rb 10/3/2017 17:05:48'!
-initialize
-	^self new initializeWithFloor: 0! !
-
 
 !classDefinition: #ElevatorClosed category: #'Elevator-Ejercicio'!
 ElevatorStatus subclass: #ElevatorClosed
@@ -631,15 +635,18 @@ ElevatorStatus subclass: #ElevatorClosed
 	poolDictionaries: ''
 	category: 'Elevator-Ejercicio'!
 
-!ElevatorClosed methodsFor: 'as yet unclassified' stamp: 'rb 10/3/2017 17:12:17'!
-cabinDoorClosed! !
+!ElevatorClosed methodsFor: 'as yet unclassified' stamp: 'rb 10/4/2017 21:00:16'!
+cabinDoorClosed
+	^ElevatorEmergency doorError .! !
 
 !ElevatorClosed methodsFor: 'as yet unclassified' stamp: 'rb 10/3/2017 17:12:17'!
 cabinDoorOpened! !
 
-!ElevatorClosed methodsFor: 'as yet unclassified' stamp: 'rb 10/3/2017 17:20:41'!
+!ElevatorClosed methodsFor: 'as yet unclassified' stamp: 'rb 10/4/2017 21:20:33'!
 cabinOnFloor: aFloor
-	^ElevatorOpening new initializeWithFloor: aFloor.! !
+	(aFloor = (floor + 1) and: ((queue isEmpty) ifTrue:[true] ifFalse:[aFloor <= queue first])) ifTrue:[
+	^ElevatorOpening new initializeWithFloor: aFloor.].
+	^ElevatorEmergency cabinError.! !
 
 !ElevatorClosed methodsFor: 'as yet unclassified' stamp: 'rb 10/4/2017 10:22:48'!
 closeCabinDoor! !
@@ -653,10 +660,10 @@ goUpPushedFromFloor: aFloor
 	queue add: aFloor.
 	^ElevatorClosing new initializeWithFloor: floor andQueue: queue.! !
 
-!ElevatorClosed methodsFor: 'as yet unclassified' stamp: 'rb 10/3/2017 17:49:34'!
+!ElevatorClosed methodsFor: 'as yet unclassified' stamp: 'rb 10/4/2017 21:18:35'!
 initializeWithFloor: aFloor
 	floor := aFloor.
-	queue := Bag new.! !
+	queue := LinkedList new.! !
 
 !ElevatorClosed methodsFor: 'as yet unclassified' stamp: 'rb 10/4/2017 10:05:22'!
 initializeWithFloor: aFloor andQueue: aQueue
@@ -693,9 +700,9 @@ cabinDoorClosed
 cabinDoorOpened
 	^ElevatorOpened new initializeWithFloor: floor andQueue: queue.! !
 
-!ElevatorClosing methodsFor: 'as yet unclassified' stamp: 'rb 10/3/2017 17:01:48'!
+!ElevatorClosing methodsFor: 'as yet unclassified' stamp: 'rb 10/4/2017 21:26:54'!
 cabinOnFloor: aFloor
-	floor := aFloor! !
+	^ElevatorOpening new initializeWithFloor: aFloor andQueue: queue.! !
 
 !ElevatorClosing methodsFor: 'as yet unclassified' stamp: 'rb 10/3/2017 17:14:22'!
 elevatorDoorIsOpened
@@ -708,10 +715,10 @@ floorNumber
 !ElevatorClosing methodsFor: 'as yet unclassified' stamp: 'rb 10/3/2017 17:57:57'!
 goUpPushedFromFloor: aFloor! !
 
-!ElevatorClosing methodsFor: 'as yet unclassified' stamp: 'rb 10/3/2017 17:49:41'!
+!ElevatorClosing methodsFor: 'as yet unclassified' stamp: 'rb 10/4/2017 21:18:40'!
 initializeWithFloor: aFloor
 	floor := aFloor.
-	queue := Bag new.! !
+	queue := LinkedList new.! !
 
 !ElevatorClosing methodsFor: 'as yet unclassified' stamp: 'rb 10/3/2017 17:47:23'!
 initializeWithFloor: aFloor andQueue: aQueue
@@ -748,8 +755,9 @@ ElevatorStatus subclass: #ElevatorOpened
 	poolDictionaries: ''
 	category: 'Elevator-Ejercicio'!
 
-!ElevatorOpened methodsFor: 'as yet unclassified' stamp: 'rb 10/3/2017 17:11:59'!
-cabinDoorClosed! !
+!ElevatorOpened methodsFor: 'as yet unclassified' stamp: 'rb 10/4/2017 20:59:13'!
+cabinDoorClosed
+	^ElevatorEmergency doorError.! !
 
 !ElevatorOpened methodsFor: 'as yet unclassified' stamp: 'rb 10/3/2017 16:52:24'!
 cabinDoorOpened! !
@@ -758,9 +766,9 @@ cabinDoorOpened! !
 cabinOnFloor: aFloor
 	floor := aFloor! !
 
-!ElevatorOpened methodsFor: 'as yet unclassified' stamp: 'rb 10/4/2017 10:10:04'!
+!ElevatorOpened methodsFor: 'as yet unclassified' stamp: 'rb 10/4/2017 20:57:52'!
 closeCabinDoor
-	^ElevatorClosing new initializeWithFloor: floor andQueue: queue! !
+	(self isIdle) ifFalse:[^ElevatorClosing new initializeWithFloor: floor andQueue: queue].! !
 
 !ElevatorOpened methodsFor: 'as yet unclassified' stamp: 'rb 10/3/2017 17:14:04'!
 elevatorDoorIsOpened
@@ -770,14 +778,15 @@ elevatorDoorIsOpened
 floorNumber
 	^floor! !
 
-!ElevatorOpened methodsFor: 'as yet unclassified' stamp: 'rb 10/3/2017 17:05:10'!
+!ElevatorOpened methodsFor: 'as yet unclassified' stamp: 'rb 10/4/2017 21:15:15'!
 goUpPushedFromFloor: aFloor
-	^ElevatorClosing new initializeWithFloor: aFloor.! !
+	queue add: aFloor.
+	^ElevatorClosing new initializeWithFloor: floor andQueue: queue.! !
 
-!ElevatorOpened methodsFor: 'as yet unclassified' stamp: 'rb 10/3/2017 17:49:48'!
+!ElevatorOpened methodsFor: 'as yet unclassified' stamp: 'rb 10/4/2017 21:18:28'!
 initializeWithFloor: aFloor
 	floor := aFloor.
-	queue := Bag new.! !
+	queue := LinkedList new.! !
 
 !ElevatorOpened methodsFor: 'as yet unclassified' stamp: 'rb 10/3/2017 17:52:58'!
 initializeWithFloor: aFloor andQueue: aQueue
@@ -822,16 +831,17 @@ ElevatorStatus subclass: #ElevatorOpening
 	poolDictionaries: ''
 	category: 'Elevator-Ejercicio'!
 
-!ElevatorOpening methodsFor: 'as yet unclassified' stamp: 'rb 10/3/2017 17:12:57'!
-cabinDoorClosed! !
+!ElevatorOpening methodsFor: 'as yet unclassified' stamp: 'rb 10/4/2017 21:00:55'!
+cabinDoorClosed
+	^ElevatorEmergency doorError .! !
 
 !ElevatorOpening methodsFor: 'as yet unclassified' stamp: 'rb 10/3/2017 17:52:30'!
 cabinDoorOpened
 	^ElevatorOpened new initializeWithFloor: floor andQueue: queue.! !
 
-!ElevatorOpening methodsFor: 'as yet unclassified' stamp: 'rb 10/3/2017 17:12:57'!
+!ElevatorOpening methodsFor: 'as yet unclassified' stamp: 'rb 10/4/2017 20:59:17'!
 cabinOnFloor: aFloor
-	floor := aFloor! !
+	^ElevatorEmergency cabinError.! !
 
 !ElevatorOpening methodsFor: 'as yet unclassified' stamp: 'rb 10/4/2017 10:23:09'!
 closeCabinDoor! !
@@ -845,10 +855,10 @@ goUpPushedFromFloor: aFloor
 	queue add: aFloor.
 	^ElevatorClosing new initializeWithFloor: floor andQueue: queue! !
 
-!ElevatorOpening methodsFor: 'as yet unclassified' stamp: 'rb 10/3/2017 17:49:52'!
+!ElevatorOpening methodsFor: 'as yet unclassified' stamp: 'rb 10/4/2017 21:18:46'!
 initializeWithFloor: aFloor
 	floor := aFloor.
-	queue := Bag new.! !
+	queue := LinkedList new.! !
 
 !ElevatorOpening methodsFor: 'as yet unclassified' stamp: 'rb 10/4/2017 10:05:43'!
 initializeWithFloor: aFloor andQueue: aQueue
@@ -873,7 +883,6 @@ ElevatorOpening class
 initialize
 	^self new initializeWithFloor: 0! !
 
-ElevatorStatus initialize!
 ElevatorClosed initialize!
 ElevatorClosing initialize!
 ElevatorOpened initialize!
