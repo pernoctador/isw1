@@ -1,3 +1,52 @@
+!classDefinition: #ConsoleCollection category: #'ElevatorConsole-Simple with Cabin-Door-Motor-Ejercicio'!
+SortedCollection subclass: #ConsoleCollection
+	instanceVariableNames: 'collection'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ElevatorConsole-Simple with Cabin-Door-Motor-Ejercicio'!
+
+!ConsoleCollection methodsFor: 'as yet unclassified' stamp: 'RB 10/12/2017 20:06:03'!
+cabinDoorIsClosed
+! !
+
+!ConsoleCollection methodsFor: 'as yet unclassified' stamp: 'RB 10/12/2017 20:06:27'!
+cabinDoorIsClosing
+! !
+
+!ConsoleCollection methodsFor: 'as yet unclassified' stamp: 'RB 10/12/2017 20:13:20'!
+cabinDoorIsClosing: aCabinDoorClosingState
+	| value |
+	value := 0.
+	(value < collection size) whileTrue: [(collection at: value) visitCabinDoorClosing: aCabinDoorClosingState. value := value+1.].
+	
+! !
+
+!ConsoleCollection methodsFor: 'as yet unclassified' stamp: 'RB 10/12/2017 20:07:12'!
+cabinDoorIsOpened
+! !
+
+!ConsoleCollection methodsFor: 'as yet unclassified' stamp: 'RB 10/12/2017 20:06:32'!
+cabinDoorIsOpening
+! !
+
+!ConsoleCollection methodsFor: 'as yet unclassified' stamp: 'RB 10/12/2017 20:07:46'!
+cabinMoving
+! !
+
+!ConsoleCollection methodsFor: 'as yet unclassified' stamp: 'RB 10/12/2017 20:07:51'!
+cabinStopped
+! !
+
+!ConsoleCollection methodsFor: 'as yet unclassified' stamp: 'RB 10/12/2017 20:07:59'!
+cabinWaitingforPeople
+! !
+
+!ConsoleCollection methodsFor: 'as yet unclassified' stamp: 'RB 10/12/2017 20:09:47'!
+initialize
+ 
+	collection := SortedCollection new.! !
+
+
 !classDefinition: #ElevatorTest category: #'ElevatorConsole-Simple with Cabin-Door-Motor-Ejercicio'!
 TestCase subclass: #ElevatorTest
 	instanceVariableNames: 'cabin door elevator'
