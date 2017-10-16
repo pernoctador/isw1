@@ -36,19 +36,19 @@ cabinDoorIsOpening: aCabinDoorOpeningState
 ! !
 
 
-!ConsoleCollection methodsFor: 'cabinState' stamp: 'F.O. 10/16/2017 11:11:15'!
+!ConsoleCollection methodsFor: 'cabinStateMessages' stamp: 'F.O. 10/16/2017 11:11:15'!
 cabinMoving: aCabinMovingState
 	| value |
 	value := 0.
 	(value < collection size) whileTrue: [(collection at: value) visitCabinMoving: aCabinMovingState. value := value+1.].! !
 
-!ConsoleCollection methodsFor: 'cabinState' stamp: 'F.O. 10/16/2017 11:12:04'!
+!ConsoleCollection methodsFor: 'cabinStateMessages' stamp: 'F.O. 10/16/2017 11:12:04'!
 cabinStopped: aCabinStoppedState
 	| value |
 	value := 0.
 	(value < collection size) whileTrue: [(collection at: value) visitCabinStopped: aCabinStoppedState. value := value+1.].! !
 
-!ConsoleCollection methodsFor: 'cabinState' stamp: 'F.O. 10/16/2017 11:12:58'!
+!ConsoleCollection methodsFor: 'cabinStateMessages' stamp: 'F.O. 10/16/2017 11:12:58'!
 cabinWaitingforPeople: aCabinWaitingState
 	| value |
 	value := 0.
