@@ -5,43 +5,57 @@ SortedCollection subclass: #ConsoleCollection
 	poolDictionaries: ''
 	category: 'ElevatorConsole-Simple with Cabin-Door-Motor-Ejercicio'!
 
-!ConsoleCollection methodsFor: 'as yet unclassified' stamp: 'RB 10/12/2017 20:06:03'!
-cabinDoorIsClosed
-! !
-
-!ConsoleCollection methodsFor: 'as yet unclassified' stamp: 'RB 10/12/2017 20:06:27'!
-cabinDoorIsClosing
-! !
-
-!ConsoleCollection methodsFor: 'as yet unclassified' stamp: 'RB 10/12/2017 20:13:20'!
-cabinDoorIsClosing: aCabinDoorClosingState
+!ConsoleCollection methodsFor: 'cabinDoorMessages' stamp: 'F.O. 10/16/2017 11:07:53'!
+cabinDoorIsClosed: aCabinDoorClosedState
 	| value |
 	value := 0.
-	(value < collection size) whileTrue: [(collection at: value) visitCabinDoorClosing: aCabinDoorClosingState. value := value+1.].
+	(value < collection size) whileTrue: [(collection at: value) visitCabinDoorClosed: aCabinDoorClosedState. value := value+1.].
 	
 ! !
 
-!ConsoleCollection methodsFor: 'as yet unclassified' stamp: 'RB 10/12/2017 20:07:12'!
-cabinDoorIsOpened
+!ConsoleCollection methodsFor: 'cabinDoorMessages' stamp: 'F.O. 10/16/2017 11:04:50'!
+cabinDoorIsClosing: aCabinDoorClosingState
+	| value |
+	value := 0.
+	(value < collection size) whileTrue: [(collection at: value) visitCabinDoorClosing: aCabinDoorClosingState. value := value+1.].! !
+
+!ConsoleCollection methodsFor: 'cabinDoorMessages' stamp: 'F.O. 10/16/2017 11:08:54'!
+cabinDoorIsOpened: aCabinDoorOpenedState
+	| value |
+	value := 0.
+	(value < collection size) whileTrue: [(collection at: value) visitCabinDoorOpened: aCabinDoorOpenedState. value := value+1.].
+	
 ! !
 
-!ConsoleCollection methodsFor: 'as yet unclassified' stamp: 'RB 10/12/2017 20:06:32'!
-cabinDoorIsOpening
+!ConsoleCollection methodsFor: 'cabinDoorMessages' stamp: 'F.O. 10/16/2017 11:09:29'!
+cabinDoorIsOpening: aCabinDoorOpeningState
+	| value |
+	value := 0.
+	(value < collection size) whileTrue: [(collection at: value) visitCabinDoorOpening: aCabinDoorOpeningState. value := value+1.].
+	
 ! !
 
-!ConsoleCollection methodsFor: 'as yet unclassified' stamp: 'RB 10/12/2017 20:07:46'!
-cabinMoving
-! !
 
-!ConsoleCollection methodsFor: 'as yet unclassified' stamp: 'RB 10/12/2017 20:07:51'!
-cabinStopped
-! !
+!ConsoleCollection methodsFor: 'cabinState' stamp: 'F.O. 10/16/2017 11:11:15'!
+cabinMoving: aCabinMovingState
+	| value |
+	value := 0.
+	(value < collection size) whileTrue: [(collection at: value) visitCabinMoving: aCabinMovingState. value := value+1.].! !
 
-!ConsoleCollection methodsFor: 'as yet unclassified' stamp: 'RB 10/12/2017 20:07:59'!
-cabinWaitingforPeople
-! !
+!ConsoleCollection methodsFor: 'cabinState' stamp: 'F.O. 10/16/2017 11:12:04'!
+cabinStopped: aCabinStoppedState
+	| value |
+	value := 0.
+	(value < collection size) whileTrue: [(collection at: value) visitCabinStopped: aCabinStoppedState. value := value+1.].! !
 
-!ConsoleCollection methodsFor: 'as yet unclassified' stamp: 'RB 10/12/2017 20:09:47'!
+!ConsoleCollection methodsFor: 'cabinState' stamp: 'F.O. 10/16/2017 11:12:58'!
+cabinWaitingforPeople: aCabinWaitingState
+	| value |
+	value := 0.
+	(value < collection size) whileTrue: [(collection at: value) visitCabinWaitingForPeople: aCabinWaitingState. value := value+1.].! !
+
+
+!ConsoleCollection methodsFor: 'initialization' stamp: 'RB 10/12/2017 20:09:47'!
 initialize
  
 	collection := SortedCollection new.! !
