@@ -606,7 +606,7 @@ Object subclass: #Cabin
 	poolDictionaries: ''
 	category: 'ElevatorConsole-Simple with Cabin-Door-Motor-Ejercicio'!
 
-!Cabin methodsFor: 'initialization' stamp: 'RB 10/12/2017 19:41:57'!
+!Cabin methodsFor: 'initialization' stamp: 'F.O. 10/17/2017 14:54:11'!
 initializeOf: anElevator
 
 	elevator := anElevator.
@@ -614,8 +614,8 @@ initializeOf: anElevator
 	motor := Motor new.
 	currentFloorNumber := 0.
 	state := CabinStoppedState for: self.
-	console := NullConsole new.
-	stateView := NullStatusView new.
+	"console := NullConsole new.
+	stateView := NullStatusView new."
 	! !
 
 
@@ -812,14 +812,14 @@ Object subclass: #CabinDoor
 	poolDictionaries: ''
 	category: 'ElevatorConsole-Simple with Cabin-Door-Motor-Ejercicio'!
 
-!CabinDoor methodsFor: 'initialization' stamp: 'RB 10/12/2017 19:46:03'!
+!CabinDoor methodsFor: 'initialization' stamp: 'F.O. 10/17/2017 14:48:50'!
 initializeOf: aCabin
 
 	cabin := aCabin.
 	motor := Motor new.
 	state :=CabinDoorOpenedState for: self.
-	console := NullConsole new.
-	statusView := NullStatusView new.! !
+	"console := NullConsole new.
+	statusView := NullStatusView new."! !
 
 
 !CabinDoor methodsFor: 'actions' stamp: 'HAW 10/4/2017 10:21:35'!
@@ -1426,12 +1426,13 @@ Object subclass: #Elevator
 	poolDictionaries: ''
 	category: 'ElevatorConsole-Simple with Cabin-Door-Motor-Ejercicio'!
 
-!Elevator methodsFor: 'initialization' stamp: 'RB 10/12/2017 19:20:34'!
+!Elevator methodsFor: 'initialization' stamp: 'F.O. 10/17/2017 14:52:24'!
 initialize
 
 	cabin := Cabin of: self.
 	floorsToGo := SortedCollection new.
 	state := ElevatorIdleState for: self.
+	console := ConsoleCollection new.
 	! !
 
 !Elevator methodsFor: 'initialization' stamp: 'RB 10/12/2017 19:21:45'!
