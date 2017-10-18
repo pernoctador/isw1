@@ -13,7 +13,7 @@ cabinDoorIsClosed: aCabinDoorClosedState
 	
 ! !
 
-!ConsoleCollection methodsFor: 'cabinDoorMessages' stamp: 'F.O. 10/17/2017 22:44:01'!
+!ConsoleCollection methodsFor: 'cabinDoorMessages' stamp: 'F.O. 10/18/2017 00:12:33'!
 cabinDoorIsClosing: aCabinDoorClosingState
 	| value |
 	value := 0.
@@ -1417,6 +1417,188 @@ accept: aVisitor
 	aVisitor visitCabinWaitingForPeople: self! !
 
 
+!classDefinition: #ConsoleView category: #'ElevatorConsole-Simple with Cabin-Door-Motor-Ejercicio'!
+Object subclass: #ConsoleView
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ElevatorConsole-Simple with Cabin-Door-Motor-Ejercicio'!
+
+!ConsoleView methodsFor: 'initialization' stamp: 'F.O. 10/17/2017 23:30:02'!
+initializeOf: anElevator
+
+	self subclassResponsibility! !
+
+
+!ConsoleView methodsFor: 'visiting' stamp: 'F.O. 10/17/2017 23:30:16'!
+visitCabinDoorClosed: aCabinDoorClosedState
+
+	self subclassResponsibility! !
+
+!ConsoleView methodsFor: 'visiting' stamp: 'F.O. 10/17/2017 23:30:12'!
+visitCabinDoorClosing: aCabinDoorClosingState 
+
+	self subclassResponsibility! !
+
+!ConsoleView methodsFor: 'visiting' stamp: 'F.O. 10/17/2017 23:30:20'!
+visitCabinDoorOpened: aCabinDoorOpenedState
+
+	self subclassResponsibility! !
+
+!ConsoleView methodsFor: 'visiting' stamp: 'F.O. 10/17/2017 23:30:24'!
+visitCabinDoorOpening: aCabinDoorOpeningState
+
+	self subclassResponsibility! !
+
+
+!classDefinition: #ElevatorConsole category: #'ElevatorConsole-Simple with Cabin-Door-Motor-Ejercicio'!
+ConsoleView subclass: #ElevatorConsole
+	instanceVariableNames: 'stream'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ElevatorConsole-Simple with Cabin-Door-Motor-Ejercicio'!
+
+!ElevatorConsole methodsFor: 'initialization' stamp: 'RB 10/12/2017 19:12:11'!
+initializeOf: anElevator
+	
+	anElevator registerConsole: self.
+	stream := WriteStream on: String new.
+! !
+
+
+!ElevatorConsole methodsFor: 'accessing' stamp: 'HAW 10/4/2017 12:41:14'!
+consoleReadStream
+	
+	^ ReadStream on: stream contents ! !
+
+
+!ElevatorConsole methodsFor: 'visiting' stamp: 'HAW 10/4/2017 14:06:45'!
+visitCabinDoorClosed: aCabinDoorClosedState 
+
+	stream 
+		nextPutAll: 'Puerta Cerrada';
+		newLine! !
+
+!ElevatorConsole methodsFor: 'visiting' stamp: 'HAW 10/4/2017 14:02:43'!
+visitCabinDoorClosing: aCabinDoorClosingState 
+	
+	stream 
+		nextPutAll: 'Puerta Cerrandose';
+		newLine! !
+
+!ElevatorConsole methodsFor: 'visiting' stamp: 'HAW 10/4/2017 14:18:17'!
+visitCabinDoorOpened: aCabinDoorOpenedState 
+! !
+
+!ElevatorConsole methodsFor: 'visiting' stamp: 'HAW 10/4/2017 14:08:27'!
+visitCabinDoorOpening: aCabinDoorOpeningState 
+
+	stream 
+		nextPutAll: 'Puerta Abriendose'  ;
+		newLine! !
+
+!ElevatorConsole methodsFor: 'visiting' stamp: 'HAW 10/4/2017 14:07:21'!
+visitCabinMoving: aCabinMovingState 
+	
+	stream 
+		nextPutAll: 'Cabina Moviendose'  ;
+		newLine! !
+
+!ElevatorConsole methodsFor: 'visiting' stamp: 'HAW 10/4/2017 14:07:59'!
+visitCabinStopped: aCabinStoppedState 
+	
+	stream 
+		nextPutAll: 'Cabina Detenida' ;
+		newLine! !
+
+!ElevatorConsole methodsFor: 'visiting' stamp: 'HAW 10/4/2017 14:20:06'!
+visitCabinWaitingForPeople: aCabinWaitingForPeopleState 
+	
+	! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'ElevatorConsole class' category: #'ElevatorConsole-Simple with Cabin-Door-Motor-Ejercicio'!
+ElevatorConsole class
+	instanceVariableNames: ''!
+
+!ElevatorConsole class methodsFor: 'instance creation' stamp: 'HAW 10/4/2017 12:46:15'!
+of: anElevator
+
+	^ self new initializeOf: anElevator  ! !
+
+
+!classDefinition: #ElevatorStatusView category: #'ElevatorConsole-Simple with Cabin-Door-Motor-Ejercicio'!
+ConsoleView subclass: #ElevatorStatusView
+	instanceVariableNames: 'cabinDoorFieldModel cabinFieldModel'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ElevatorConsole-Simple with Cabin-Door-Motor-Ejercicio'!
+
+!ElevatorStatusView methodsFor: 'initialization' stamp: 'RB 10/12/2017 19:33:35'!
+initializeOf: anElevator
+	anElevator registerStatusView: self.
+! !
+
+
+!ElevatorStatusView methodsFor: 'accessing' stamp: 'HAW 10/4/2017 12:41:24'!
+cabinDoorFieldModel
+	
+	^ cabinDoorFieldModel! !
+
+!ElevatorStatusView methodsFor: 'accessing' stamp: 'HAW 10/4/2017 12:41:24'!
+cabinFieldModel
+	
+	^ cabinFieldModel! !
+
+
+!ElevatorStatusView methodsFor: 'visiting' stamp: 'HAW 10/4/2017 12:41:24'!
+visitCabinDoorClosed: aCabinDoorClosedState 
+
+	cabinDoorFieldModel := 'Closed'! !
+
+!ElevatorStatusView methodsFor: 'visiting' stamp: 'HAW 10/4/2017 12:41:24'!
+visitCabinDoorClosing: aCabinDoorClosingState 
+	
+	cabinDoorFieldModel := 'Closing'! !
+
+!ElevatorStatusView methodsFor: 'visiting' stamp: 'HAW 10/4/2017 14:18:32'!
+visitCabinDoorOpened: aCabinDoorOpenedState 
+
+	cabinDoorFieldModel := 'Opened'! !
+
+!ElevatorStatusView methodsFor: 'visiting' stamp: 'HAW 10/4/2017 12:41:24'!
+visitCabinDoorOpening: aCabinDoorOpeningState 
+
+	cabinDoorFieldModel := 'Opening'! !
+
+!ElevatorStatusView methodsFor: 'visiting' stamp: 'HAW 10/4/2017 12:41:24'!
+visitCabinMoving: aCabinMovingState 
+	
+	cabinFieldModel := 'Moving'! !
+
+!ElevatorStatusView methodsFor: 'visiting' stamp: 'HAW 10/4/2017 12:41:24'!
+visitCabinStopped: aCabinStoppedState 
+	
+	cabinFieldModel := 'Stopped'! !
+
+!ElevatorStatusView methodsFor: 'visiting' stamp: 'HAW 10/4/2017 14:20:21'!
+visitCabinWaitingForPeople: aCabinWaitingForPeopleState 
+	
+	cabinFieldModel := 'Waiting for People'! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'ElevatorStatusView class' category: #'ElevatorConsole-Simple with Cabin-Door-Motor-Ejercicio'!
+ElevatorStatusView class
+	instanceVariableNames: ''!
+
+!ElevatorStatusView class methodsFor: 'instance creation' stamp: 'HAW 10/4/2017 12:46:55'!
+of: anElevator
+
+	^ self new initializeOf: anElevator! !
+
+
 !classDefinition: #Elevator category: #'ElevatorConsole-Simple with Cabin-Door-Motor-Ejercicio'!
 Object subclass: #Elevator
 	instanceVariableNames: 'cabin state floorsToGo console'
@@ -1433,8 +1615,9 @@ initialize
 	console := ConsoleCollection new.
 	! !
 
-!Elevator methodsFor: 'initialization' stamp: 'F.O. 10/17/2017 22:24:04'!
+!Elevator methodsFor: 'initialization' stamp: 'F.O. 10/17/2017 23:45:55'!
 registerConsole: aConsole
+	self initialize.
 	console add: aConsole.! !
 
 
@@ -1549,83 +1732,6 @@ registerCabinWaitingforPeople: aCabinWaitingState
 	console cabinWaitingforPeople: aCabinWaitingState! !
 
 
-!classDefinition: #ElevatorConsole category: #'ElevatorConsole-Simple with Cabin-Door-Motor-Ejercicio'!
-Object subclass: #ElevatorConsole
-	instanceVariableNames: 'stream'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'ElevatorConsole-Simple with Cabin-Door-Motor-Ejercicio'!
-
-!ElevatorConsole methodsFor: 'initialization' stamp: 'RB 10/12/2017 19:12:11'!
-initializeOf: anElevator
-	
-	anElevator registerConsole: self.
-	stream := WriteStream on: String new.
-! !
-
-
-!ElevatorConsole methodsFor: 'accessing' stamp: 'HAW 10/4/2017 12:41:14'!
-consoleReadStream
-	
-	^ ReadStream on: stream contents ! !
-
-
-!ElevatorConsole methodsFor: 'visiting' stamp: 'HAW 10/4/2017 14:06:45'!
-visitCabinDoorClosed: aCabinDoorClosedState 
-
-	stream 
-		nextPutAll: 'Puerta Cerrada';
-		newLine! !
-
-!ElevatorConsole methodsFor: 'visiting' stamp: 'HAW 10/4/2017 14:02:43'!
-visitCabinDoorClosing: aCabinDoorClosingState 
-	
-	stream 
-		nextPutAll: 'Puerta Cerrandose';
-		newLine! !
-
-!ElevatorConsole methodsFor: 'visiting' stamp: 'HAW 10/4/2017 14:18:17'!
-visitCabinDoorOpened: aCabinDoorOpenedState 
-! !
-
-!ElevatorConsole methodsFor: 'visiting' stamp: 'HAW 10/4/2017 14:08:27'!
-visitCabinDoorOpening: aCabinDoorOpeningState 
-
-	stream 
-		nextPutAll: 'Puerta Abriendose'  ;
-		newLine! !
-
-!ElevatorConsole methodsFor: 'visiting' stamp: 'HAW 10/4/2017 14:07:21'!
-visitCabinMoving: aCabinMovingState 
-	
-	stream 
-		nextPutAll: 'Cabina Moviendose'  ;
-		newLine! !
-
-!ElevatorConsole methodsFor: 'visiting' stamp: 'HAW 10/4/2017 14:07:59'!
-visitCabinStopped: aCabinStoppedState 
-	
-	stream 
-		nextPutAll: 'Cabina Detenida' ;
-		newLine! !
-
-!ElevatorConsole methodsFor: 'visiting' stamp: 'HAW 10/4/2017 14:20:06'!
-visitCabinWaitingForPeople: aCabinWaitingForPeopleState 
-	
-	! !
-
-"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
-
-!classDefinition: 'ElevatorConsole class' category: #'ElevatorConsole-Simple with Cabin-Door-Motor-Ejercicio'!
-ElevatorConsole class
-	instanceVariableNames: ''!
-
-!ElevatorConsole class methodsFor: 'instance creation' stamp: 'HAW 10/4/2017 12:46:15'!
-of: anElevator
-
-	^ self new initializeOf: anElevator  ! !
-
-
 !classDefinition: #ElevatorState category: #'ElevatorConsole-Simple with Cabin-Door-Motor-Ejercicio'!
 Object subclass: #ElevatorState
 	instanceVariableNames: 'elevator'
@@ -1715,77 +1821,6 @@ isWorking
 	^true! !
 
 
-!classDefinition: #ElevatorStatusView category: #'ElevatorConsole-Simple with Cabin-Door-Motor-Ejercicio'!
-Object subclass: #ElevatorStatusView
-	instanceVariableNames: 'cabinDoorFieldModel cabinFieldModel'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'ElevatorConsole-Simple with Cabin-Door-Motor-Ejercicio'!
-
-!ElevatorStatusView methodsFor: 'initialization' stamp: 'RB 10/12/2017 19:33:35'!
-initializeOf: anElevator
-	anElevator registerStatusView: self.
-! !
-
-
-!ElevatorStatusView methodsFor: 'accessing' stamp: 'HAW 10/4/2017 12:41:24'!
-cabinDoorFieldModel
-	
-	^ cabinDoorFieldModel! !
-
-!ElevatorStatusView methodsFor: 'accessing' stamp: 'HAW 10/4/2017 12:41:24'!
-cabinFieldModel
-	
-	^ cabinFieldModel! !
-
-
-!ElevatorStatusView methodsFor: 'visiting' stamp: 'HAW 10/4/2017 12:41:24'!
-visitCabinDoorClosed: aCabinDoorClosedState 
-
-	cabinDoorFieldModel := 'Closed'! !
-
-!ElevatorStatusView methodsFor: 'visiting' stamp: 'HAW 10/4/2017 12:41:24'!
-visitCabinDoorClosing: aCabinDoorClosingState 
-	
-	cabinDoorFieldModel := 'Closing'! !
-
-!ElevatorStatusView methodsFor: 'visiting' stamp: 'HAW 10/4/2017 14:18:32'!
-visitCabinDoorOpened: aCabinDoorOpenedState 
-
-	cabinDoorFieldModel := 'Opened'! !
-
-!ElevatorStatusView methodsFor: 'visiting' stamp: 'HAW 10/4/2017 12:41:24'!
-visitCabinDoorOpening: aCabinDoorOpeningState 
-
-	cabinDoorFieldModel := 'Opening'! !
-
-!ElevatorStatusView methodsFor: 'visiting' stamp: 'HAW 10/4/2017 12:41:24'!
-visitCabinMoving: aCabinMovingState 
-	
-	cabinFieldModel := 'Moving'! !
-
-!ElevatorStatusView methodsFor: 'visiting' stamp: 'HAW 10/4/2017 12:41:24'!
-visitCabinStopped: aCabinStoppedState 
-	
-	cabinFieldModel := 'Stopped'! !
-
-!ElevatorStatusView methodsFor: 'visiting' stamp: 'HAW 10/4/2017 14:20:21'!
-visitCabinWaitingForPeople: aCabinWaitingForPeopleState 
-	
-	cabinFieldModel := 'Waiting for People'! !
-
-"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
-
-!classDefinition: 'ElevatorStatusView class' category: #'ElevatorConsole-Simple with Cabin-Door-Motor-Ejercicio'!
-ElevatorStatusView class
-	instanceVariableNames: ''!
-
-!ElevatorStatusView class methodsFor: 'instance creation' stamp: 'HAW 10/4/2017 12:46:55'!
-of: anElevator
-
-	^ self new initializeOf: anElevator! !
-
-
 !classDefinition: #Motor category: #'ElevatorConsole-Simple with Cabin-Door-Motor-Ejercicio'!
 Object subclass: #Motor
 	instanceVariableNames: 'state'
@@ -1867,115 +1902,3 @@ Motor class
 motorMustBeStoppedBeforeMovingAgainErrorMessage
 
 	^'El motor debe estar parado antes de que se empiece a mover'! !
-
-
-!classDefinition: #NullConsole category: #'ElevatorConsole-Simple with Cabin-Door-Motor-Ejercicio'!
-Object subclass: #NullConsole
-	instanceVariableNames: 'stream'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'ElevatorConsole-Simple with Cabin-Door-Motor-Ejercicio'!
-
-!NullConsole methodsFor: 'initialization' stamp: 'RB 10/12/2017 19:13:36'!
-initializeOf: anElevator! !
-
-
-!NullConsole methodsFor: 'accessing' stamp: 'RB 10/12/2017 19:13:30'!
-consoleReadStream
-! !
-
-
-!NullConsole methodsFor: 'visiting' stamp: 'RB 10/12/2017 19:13:53'!
-visitCabinDoorClosed: aCabinDoorClosedState ! !
-
-!NullConsole methodsFor: 'visiting' stamp: 'RB 10/12/2017 19:13:57'!
-visitCabinDoorClosing: aCabinDoorClosingState ! !
-
-!NullConsole methodsFor: 'visiting' stamp: 'RB 10/12/2017 19:13:23'!
-visitCabinDoorOpened: aCabinDoorOpenedState 
-! !
-
-!NullConsole methodsFor: 'visiting' stamp: 'RB 10/12/2017 19:14:01'!
-visitCabinDoorOpening: aCabinDoorOpeningState 
-! !
-
-!NullConsole methodsFor: 'visiting' stamp: 'RB 10/12/2017 19:14:05'!
-visitCabinMoving: aCabinMovingState 
-	! !
-
-!NullConsole methodsFor: 'visiting' stamp: 'RB 10/12/2017 19:14:08'!
-visitCabinStopped: aCabinStoppedState 
-	! !
-
-!NullConsole methodsFor: 'visiting' stamp: 'RB 10/12/2017 19:13:23'!
-visitCabinWaitingForPeople: aCabinWaitingForPeopleState 
-	
-	! !
-
-"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
-
-!classDefinition: 'NullConsole class' category: #'ElevatorConsole-Simple with Cabin-Door-Motor-Ejercicio'!
-NullConsole class
-	instanceVariableNames: ''!
-
-!NullConsole class methodsFor: 'instance creation' stamp: 'RB 10/12/2017 19:13:23'!
-of: anElevator
-
-	^ self new initializeOf: anElevator  ! !
-
-
-!classDefinition: #NullStatusView category: #'ElevatorConsole-Simple with Cabin-Door-Motor-Ejercicio'!
-Object subclass: #NullStatusView
-	instanceVariableNames: 'cabinDoorFieldModel cabinFieldModel'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'ElevatorConsole-Simple with Cabin-Door-Motor-Ejercicio'!
-
-!NullStatusView methodsFor: 'initialization' stamp: 'RB 10/12/2017 19:38:08'!
-initializeOf: anElevator
-! !
-
-
-!NullStatusView methodsFor: 'accessing' stamp: 'RB 10/12/2017 19:37:54'!
-cabinDoorFieldModel
-	! !
-
-!NullStatusView methodsFor: 'accessing' stamp: 'RB 10/12/2017 19:37:58'!
-cabinFieldModel! !
-
-
-!NullStatusView methodsFor: 'visiting' stamp: 'RB 10/12/2017 19:38:14'!
-visitCabinDoorClosed: aCabinDoorClosedState 
-! !
-
-!NullStatusView methodsFor: 'visiting' stamp: 'RB 10/12/2017 19:38:18'!
-visitCabinDoorClosing: aCabinDoorClosingState ! !
-
-!NullStatusView methodsFor: 'visiting' stamp: 'RB 10/12/2017 19:38:22'!
-visitCabinDoorOpened: aCabinDoorOpenedState ! !
-
-!NullStatusView methodsFor: 'visiting' stamp: 'RB 10/12/2017 19:38:25'!
-visitCabinDoorOpening: aCabinDoorOpeningState ! !
-
-!NullStatusView methodsFor: 'visiting' stamp: 'RB 10/12/2017 19:38:29'!
-visitCabinMoving: aCabinMovingState 
-	! !
-
-!NullStatusView methodsFor: 'visiting' stamp: 'RB 10/12/2017 19:38:35'!
-visitCabinStopped: aCabinStoppedState 
-	! !
-
-!NullStatusView methodsFor: 'visiting' stamp: 'RB 10/12/2017 19:38:40'!
-visitCabinWaitingForPeople: aCabinWaitingForPeopleState 
-	! !
-
-"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
-
-!classDefinition: 'NullStatusView class' category: #'ElevatorConsole-Simple with Cabin-Door-Motor-Ejercicio'!
-NullStatusView class
-	instanceVariableNames: ''!
-
-!NullStatusView class methodsFor: 'instance creation' stamp: 'RB 10/12/2017 19:37:48'!
-of: anElevator
-
-	^ self new initializeOf: anElevator! !
