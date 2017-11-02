@@ -111,7 +111,7 @@ testR07RestReturnCheckoutWithCorrectID
 	self assert: (rest checkout: idCart withNumberCard: 123456789301 withExpirationDate: Date today withNameHolder: 'kevin') = 1 .
 	self assert: (rest checkout: idCart2 withNumberCard: 123456789301 withExpirationDate: Date today withNameHolder: 'kevin') = 2	.! !
 
-!TuLibroTests methodsFor: 'rest' stamp: 'RB 6/27/2017 17:49:15'!
+!TuLibroTests methodsFor: 'rest' stamp: 'F.O. 11/2/2017 15:15:39'!
 testR08RestCheckoutOfElementWithInvalidCardIsNotATransaction
 
 	| idCart  bag |
@@ -123,7 +123,7 @@ testR08RestCheckoutOfElementWithInvalidCardIsNotATransaction
 	bag:= Bag new.
 	bag add:1.
 	
-	anInvoice := Invoice withElements: bag.
+	anInvoice := Invoice withElements: bag withTotal: 1.
 	
 	self should: [rest checkout: idCart withNumberCard: 12345679301 withExpirationDate: Date today withNameHolder: 'kevin'] 
 				raise: Error  
@@ -143,7 +143,7 @@ testR08RestCheckoutOfElementWithInvalidCardIsNotATransaction
 					self assert: (rest transactions isEmpty).
 					].! !
 
-!TuLibroTests methodsFor: 'rest' stamp: 'RB 6/27/2017 17:49:35'!
+!TuLibroTests methodsFor: 'rest' stamp: 'F.O. 11/2/2017 15:15:16'!
 testR09RestCheckoutWithInvalidCardIsNotATransactionEver
 
 	| idCart  bag |
@@ -155,7 +155,7 @@ testR09RestCheckoutWithInvalidCardIsNotATransactionEver
 	bag:= Bag new.
 	bag add:1.
 	
-	anInvoice := Invoice withElements: bag.
+	anInvoice := Invoice withElements: bag withTotal: 1.
 	
 	self should: [rest checkout: idCart withNumberCard: 123456789301 withExpirationDate: Date today withNameHolder: 'kevin'] 
 				raise: Error  
@@ -302,52 +302,61 @@ testR19RestCartInUseIsValid
 	! !
 
 
-!TuLibroTests methodsFor: 'card' stamp: 'RB 6/26/2017 15:47:55'!
+!TuLibroTests methodsFor: 'card' stamp: 'F.O. 11/2/2017 14:56:05'!
 testCard01AValidCardIsNotExpired
+	self deny:
+		((CreditCard
+			withNumber: 123456789913
+			withName: 'kevin'
+			withExpirationMonth: Date today + 1 days) isExpiredOn: Date today).! !
 
-	
-	self deny: ((Card withNumber: 123456789913 withName: 'kevin' withExpirationDate: (Date today + 1 days)) isExpiredOn: Date today)
-! !
-
-!TuLibroTests methodsFor: 'card' stamp: 'RB 6/26/2017 15:48:02'!
+!TuLibroTests methodsFor: 'card' stamp: 'F.O. 11/2/2017 14:56:05'!
 testCard02AValidCardWithAYearDifferenceIsNotExpired
+	self deny:
+		((CreditCard
+			withNumber: 123456789913
+			withName: 'kevin'
+			withExpirationMonth: Date today + 380 days) isExpiredOn: Date today).! !
 
-	
-	
-	self deny: ((Card withNumber: 123456789913  withName: 'kevin' withExpirationDate: (Date today + 380 days))  isExpiredOn: Date today)
- 
-
-! !
-
-!TuLibroTests methodsFor: 'card' stamp: 'RB 6/26/2017 15:48:07'!
+!TuLibroTests methodsFor: 'card' stamp: 'F.O. 11/2/2017 14:56:05'!
 testCard03AnInvalidCardWithAYearDifferenceIsExpired
+	self assert:
+		((CreditCard
+			withNumber: 123456789913
+			withName: 'kevin'
+			withExpirationMonth: Date today - 367 days) isExpiredOn: Date today).! !
 
-	self assert: ((Card withNumber: 123456789913  withName: 'kevin' withExpirationDate: (Date today - 367 days))  isExpiredOn: Date today)
-! !
-
-!TuLibroTests methodsFor: 'card' stamp: 'RB 6/26/2017 15:48:16'!
+!TuLibroTests methodsFor: 'card' stamp: 'F.O. 11/2/2017 14:56:05'!
 testCard04AnInvalidCardWithAMonthDifferenceIsExpired
-	 
-	self assert: ((Card withNumber: 123456789913  withName: 'kevin' withExpirationDate: (Date today - 32 days)) isExpiredOn: Date today).
-			! !
+	self assert:
+		((CreditCard
+			withNumber: 123456789913
+			withName: 'kevin'
+			withExpirationMonth: Date today - 32 days) isExpiredOn: Date today).! !
 
-!TuLibroTests methodsFor: 'card' stamp: 'RB 6/26/2017 15:48:34'!
+!TuLibroTests methodsFor: 'card' stamp: 'F.O. 11/2/2017 14:56:05'!
 testCard05AValidCardNameCantBeEmpty
-	 
-	self should: [Card withNumber: 123456789101  withName: '' withExpirationDate: Date today.] 
-	raise: Error
-	withExceptionDo: [:anError | self assert: (anError messageText = Card invalidName)].
-	
-! !
+	self
+		should: [
+			CreditCard
+				withNumber: 123456789101
+				withName: ''
+				withExpirationMonth: Date today ]
+		raise: Error
+		withExceptionDo: [ :anError |
+			self assert: anError messageText = CreditCard invalidName ].! !
 
-!TuLibroTests methodsFor: 'card' stamp: 'RB 6/26/2017 15:48:41'!
+!TuLibroTests methodsFor: 'card' stamp: 'F.O. 11/2/2017 14:56:05'!
 testCard06AValidCardLengthIsAlways12
-	 
-	self should: [Card withNumber: 1234567891  withName: 'ker' withExpirationDate: Date today.] 
-	raise: Error
-	withExceptionDo: [:anError | self assert: (anError messageText = Card invalidNumber)].
-	
-! !
+	self
+		should: [
+			CreditCard
+				withNumber: 1234567891
+				withName: 'ker'
+				withExpirationMonth: Date today ]
+		raise: Error
+		withExceptionDo: [ :anError |
+			self assert: anError messageText = CreditCard invalidNumber ].! !
 
 
 !TuLibroTests methodsFor: 'cashier' stamp: 'RB 6/26/2017 15:45:47'!
@@ -359,32 +368,41 @@ testCashier01ACheckoutReturnAnInvoice
 	
 	self assert: (cashier checkOutOnDate: Date today withMerchant: merchant ) = anInvoice! !
 
-!TuLibroTests methodsFor: 'cashier' stamp: 'RB 6/26/2017 15:45:56'!
+!TuLibroTests methodsFor: 'cashier' stamp: 'F.O. 11/2/2017 13:37:19'!
 testCashier02ACashierRaiseAnErrorIfCardIsInvalid
-	
-	
 	merchant addValidCard: anExpiredCard.
-	
-	cashier := self cashierWithCart: cartWithElements withCard: anExpiredCard withBook: aBook.
-	
-	self should: [cashier checkOutOnDate: (Date today) withMerchant: merchant ]  
-		 raise: Error 
-		 withExceptionDo: [:anError | self assert: anError messageText = Card expiredError.
-								self assert: aBook isEmpty.
-						]! !
+	cashier _ self
+		cashierWithCart: cartWithElements
+		withCard: anExpiredCard
+		withBook: aBook.
+	self
+		should: [
+			cashier
+				checkOutOnDate: Date today
+				withMerchant: merchant ]
+		raise: Error
+		withExceptionDo: [ :anError |
+			self assert: anError messageText = CreditCard expiredError.
+			self assert: aBook isEmpty ].! !
 
-!TuLibroTests methodsFor: 'cashier' stamp: 'RB 6/26/2017 15:46:05'!
+!TuLibroTests methodsFor: 'cashier' stamp: 'F.O. 11/2/2017 13:37:19'!
 testCashier03ACashierRaiseAnErrorIfCardWithoutBalance
-	
-	merchant addValidCard: aValidCard withAmount: 0.
-	
-	cashier := self cashierWithCart: cartWithElements withCard: aValidCard withBook: aBook.
-	
-	self should: [cashier checkOutOnDate: (Date today) withMerchant: merchant ]  
-		 raise: Error 
-		 withExceptionDo: [:anError | self assert: anError messageText = Card withoutBalance .
-								self assert: aBook isEmpty.
-						]! !
+	merchant
+		addValidCard: aValidCard
+		withAmount: 0.
+	cashier _ self
+		cashierWithCart: cartWithElements
+		withCard: aValidCard
+		withBook: aBook.
+	self
+		should: [
+			cashier
+				checkOutOnDate: Date today
+				withMerchant: merchant ]
+		raise: Error
+		withExceptionDo: [ :anError |
+			self assert: anError messageText = CreditCard withoutBalance.
+			self assert: aBook isEmpty ].! !
 
 !TuLibroTests methodsFor: 'cashier' stamp: 'RB 6/26/2017 15:46:14'!
 testCashier04ACashierCheckoutReturnAnInvoice
@@ -540,12 +558,16 @@ test10ACartCantAddThingsThatAreNotInTheCatalog
 							 ].! !
 
 
-!TuLibroTests methodsFor: 'merchant' stamp: 'RB 6/26/2017 15:49:24'!
+!TuLibroTests methodsFor: 'merchant' stamp: 'F.O. 11/2/2017 13:37:18'!
 testM01AMerchantCantDebitAnExpiredCard
-	
-	self should: [merchant debit: 100 withCard: anExpiredCard .] 
-	       raise: Error - MessageNotUnderstood 
-		 withExceptionDo: [:anError| anError messageText = Card expiredError]! !
+	self
+		should: [
+			merchant
+				debit: 100
+				withCard: anExpiredCard ]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :anError |
+			anError messageText = CreditCard expiredError ].! !
 
 !TuLibroTests methodsFor: 'merchant' stamp: 'RB 6/26/2017 15:49:31'!
 testM02AMerchantDebitAValidCard
@@ -556,22 +578,30 @@ testM02AMerchantDebitAValidCard
 	       raise: Error - MessageNotUnderstood 
 		 ! !
 
-!TuLibroTests methodsFor: 'merchant' stamp: 'RB 6/26/2017 15:49:38'!
+!TuLibroTests methodsFor: 'merchant' stamp: 'F.O. 11/2/2017 13:37:19'!
 testM03AMerchantCantDebitACardWithoutAddHer
-	
-	self should: [merchant debit: 100 withCard: aValidCard .] 
-	       raise: Error - MessageNotUnderstood 
-		 withExceptionDo: [:anError| self assert: (anError messageText = Card invalidCard )]! !
+	self
+		should: [
+			merchant
+				debit: 100
+				withCard: aValidCard ]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :anError |
+			self assert: anError messageText = CreditCard invalidCard ].! !
 
-!TuLibroTests methodsFor: 'merchant' stamp: 'RB 6/26/2017 15:49:44'!
+!TuLibroTests methodsFor: 'merchant' stamp: 'F.O. 11/2/2017 13:37:18'!
 testM04AMerchantCantDebitAnAmountThatACardHasnt
-	
-	
-	merchant addValidCard: aValidCard withAmount: 50.
-	
-		self should: [merchant debit: 100 withCard: aValidCard .] 
-	       raise: Error - MessageNotUnderstood 
-		 withExceptionDo: [:anError| self assert: (anError messageText = Card withoutBalance )]! !
+	merchant
+		addValidCard: aValidCard
+		withAmount: 50.
+	self
+		should: [
+			merchant
+				debit: 100
+				withCard: aValidCard ]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :anError |
+			self assert: anError messageText = CreditCard withoutBalance ].! !
 
 !TuLibroTests methodsFor: 'merchant' stamp: 'RB 6/26/2017 15:50:16'!
 testM05AMerchantProccesorCantDebitIfItIsOutOfService
@@ -588,121 +618,57 @@ testM05AMerchantProccesorCantDebitIfItIsOutOfService
 cashierWithCart: aCart withCard: aCard withBook: aBook 
 	^ Cashier withCart: aCart withCard: aCard withBook: aBook ! !
 
-!TuLibroTests methodsFor: 'setUp' stamp: 'KF 6/27/2017 00:44:16'!
+!TuLibroTests methodsFor: 'setUp' stamp: 'F.O. 11/2/2017 15:02:35'!
 setUp
-	catalogWithElements := Catalog new.
-	catalogWithElements  put: 1 withPrice: 1.
-	catalogWithElements  put: 2 withPrice: 1.
-		
-	emptyCatalog := Catalog new.
-	
-	aCart := Cart withCatalog: catalogWithElements.
-	cartWithEmptyCatalog := Cart withCatalog: emptyCatalog.
-	cartWithElements := Cart withCatalog: catalogWithElements .
+	catalogWithElements _ Dictionary new.
+	catalogWithElements at: 1 put: 1.
+	catalogWithElements at: 2 put: 1.
+	emptyCatalog _ Dictionary new.
+	aCart _ Cart withCatalog: catalogWithElements.
+	cartWithEmptyCatalog _ Cart withCatalog: emptyCatalog.
+	cartWithElements _ Cart withCatalog: catalogWithElements.
 	cartWithElements add: 1.
 	cartWithElements add: 2.
-	
-	cashier := Cashier new.
-	
-	aValidCard :=  Card withNumber: 123456789101  withName: 'kevin' withExpirationDate: (Date today + 1 days).
-	anExpiredCard := Card withNumber: 213456789101  withName: 'kevin' withExpirationDate: (Date today - 60 days).
-		
-	anInvoice := Invoice withElements: (cartWithElements products ) withTotal: 2.
-	
-	merchant :=MerchantProcesorMock withDate: Date today.
-
-	aBook := OrderedCollection new.
-	
-	dataLogin := Dictionary new.
-	dataLogin at: 1 put:1.
-	dataLogin at: 2 put:2.
-	
-	merchantRest :=MerchantProcesorMock withDate: Date today.
-	merchantRest addValidCard:  (Card withNumber: 123456789301  withName: 'kevin' withExpirationDate: (Date today)) withAmount: 	100.
-	rest := Rest withCatalog: catalogWithElements withDataLogin: dataLogin withTime: (DateAndTime now) withMerchant: merchantRest withBook: aBook.! !
+	cashier _ Cashier new.
+	aValidCard _ CreditCard
+		withNumber: 123456789101
+		withName: 'kevin'
+		withExpirationMonth: Date today + 1 days.
+	anExpiredCard _ CreditCard
+		withNumber: 213456789101
+		withName: 'kevin'
+		withExpirationMonth: Date today - 60 days.
+	anInvoice _ Invoice
+		withElements: cartWithElements products
+		withTotal: 2.
+	merchant _ MerchantProcesorMock withDate: Date today.
+	aBook _ OrderedCollection new.
+	dataLogin _ Dictionary new.
+	dataLogin
+		at: 1
+		put: 1.
+	dataLogin
+		at: 2
+		put: 2.
+	merchantRest _ MerchantProcesorMock withDate: Date today.
+	merchantRest
+		addValidCard:
+			(CreditCard
+				withNumber: 123456789301
+				withName: 'kevin'
+				withExpirationMonth: Date today)
+		withAmount: 100.
+	rest _ Rest
+		withCatalog: catalogWithElements
+		withDataLogin: dataLogin
+		withTime: DateAndTime now
+		withMerchant: merchantRest
+		withBook: aBook.! !
 
 
 !TuLibroTests methodsFor: 'toDo' stamp: 'kf 6/25/2017 11:10:59'!
 toDo: aString 
 ! !
-
-
-!classDefinition: #Card category: #'TuLibro-Solution'!
-Object subclass: #Card
-	instanceVariableNames: 'cardNumber cardHolder expirationDate'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'TuLibro-Solution'!
-
-!Card methodsFor: 'accessing' stamp: 'kf 6/18/2017 11:19:47'!
-cardNumber
-	^ cardNumber ! !
-
-!Card methodsFor: 'accessing' stamp: 'kf 6/15/2017 20:04:55'!
-isExpired
-
-|actualMonthYear|
-	
-	actualMonthYear := Month month: (Date today monthIndex ) year:  (Date today yearNumber ).
-	(expirationDate yearNumber < actualMonthYear yearNumber) ifTrue: [^true].
-	((expirationDate monthIndex < actualMonthYear monthIndex ) and: [expirationDate yearNumber = actualMonthYear yearNumber]) ifTrue: [^true].
-
-^false! !
-
-!Card methodsFor: 'accessing' stamp: 'kf 6/18/2017 11:04:49'!
-isExpiredOn: aDate
-	
-	(expirationDate yearNumber < aDate yearNumber) ifTrue: [^true].
-	((expirationDate monthIndex < aDate monthIndex ) and: [expirationDate yearNumber = aDate yearNumber]) ifTrue: [^true].
-	^false! !
-
-
-!Card methodsFor: 'initialization' stamp: 'kf 6/14/2017 00:09:35'!
-withNumber: acardNumber withName: acardHolder withExpirationDate: amonthOfYear 
-	cardNumber := acardNumber.
-	cardHolder := acardHolder.
-	expirationDate := amonthOfYear .! !
-
-
-!Card methodsFor: 'comparing' stamp: 'kf 6/18/2017 11:07:57'!
-= aCard
-
-	(aCard isKindOf: self class) ifFalse: [^false].
-	^ cardNumber = aCard cardNumber! !
-
-"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
-
-!classDefinition: 'Card class' category: #'TuLibro-Solution'!
-Card class
-	instanceVariableNames: ''!
-
-!Card class methodsFor: 'instance creation' stamp: 'kf 6/22/2017 19:31:21'!
-withNumber: cardNumber withName: cardHolder withExpirationDate: monthYear 
-	
-	self assert: (cardHolder isEmpty) not description: [self error: (Card invalidName) ].
-	self assert: (cardNumber decimalDigitLength  = 12) description: [self error: (Card invalidNumber )].
-	^self new withNumber: cardNumber withName: cardHolder withExpirationDate: monthYear ! !
-
-
-!Card class methodsFor: 'exceptions' stamp: 'RB 6/27/2017 17:26:19'!
-expiredError
-	^ 'La tarjeta expiro'.! !
-
-!Card class methodsFor: 'exceptions' stamp: 'kf 6/18/2017 12:49:53'!
-invalidCard
-	^ 'Tarjeta invalida' ! !
-
-!Card class methodsFor: 'exceptions' stamp: 'kf 6/22/2017 19:22:26'!
-invalidName
-	^ 'Nombre invalido'! !
-
-!Card class methodsFor: 'exceptions' stamp: 'kf 6/22/2017 19:26:36'!
-invalidNumber
-	^ 'invalid number'! !
-
-!Card class methodsFor: 'exceptions' stamp: 'kf 6/18/2017 12:50:30'!
-withoutBalance
-	^ 'Sin Saldo'! !
 
 
 !classDefinition: #Cart category: #'TuLibro-Solution'!
@@ -728,12 +694,12 @@ add: anElement
 	self add: anElement quantity: 1.
 ! !
 
-!Cart methodsFor: 'adding' stamp: 'kf 6/25/2017 11:33:41'!
+!Cart methodsFor: 'adding' stamp: 'F.O. 11/2/2017 15:09:35'!
 add: anElement quantity: aQuantity 
 	self assert: aQuantity isInteger description: [self error: 'Invalid isbn'].
 	self assert:  aQuantity  > 0 description: [self error: 'Invalid isbn'].
 	
-	self assert: (catalog includes: anElement) description: [self error: 'No pertenece al catalogo'].
+	self assert: (catalog includesKey: anElement) description: [self error: 'No pertenece al catalogo'].
 	
 	elements add: anElement withOccurrences: aQuantity.
 	! !
@@ -787,20 +753,21 @@ Object subclass: #Cashier
 	poolDictionaries: ''
 	category: 'TuLibro-Solution'!
 
-!Cashier methodsFor: 'checkout' stamp: 'kf 6/25/2017 12:30:35'!
+!Cashier methodsFor: 'checkout' stamp: 'F.O. 11/2/2017 13:37:19'!
 checkOutOnDate: aDate withMerchant: aMerchantProcesor
-	
-	|cost invoice |
-	
-	self assert: (card isExpiredOn: aDate) not description: [self error: Card expiredError ].
-	
-	cost := self cost.
-	
-	self debit: aMerchantProcesor withAmount: cost.	
-	invoice := Invoice withElements: cart products withTotal: cost.
+	| cost invoice |
+	self
+		assert: (card isExpiredOn: aDate) not
+		description: [ self error: CreditCard expiredError ].
+	cost _ self cost.
+	self
+		debit: aMerchantProcesor
+		withAmount: cost.
+	invoice _ Invoice
+		withElements: cart products
+		withTotal: cost.
 	book add: invoice.
-	
-	^ invoice! !
+	^ invoice.! !
 
 !Cashier methodsFor: 'checkout' stamp: 'kf 6/18/2017 12:48:12'!
 debit: aMerchantProcesor withAmount: amountToDebit
@@ -808,17 +775,22 @@ debit: aMerchantProcesor withAmount: amountToDebit
 	 aMerchantProcesor debit: amountToDebit withCard: card 
 ! !
 
+!Cashier methodsFor: 'checkout' stamp: 'F.O. 11/2/2017 13:35:54'!
+isCartEmpty
 
-!Cashier methodsFor: 'accessing' stamp: 'KF 6/25/2017 21:01:00'!
+	cart isEmpty  ifTrue: [	self error: 'No me pases un cart vacio'.]! !
+
+
+!Cashier methodsFor: 'accessing' stamp: 'F.O. 11/2/2017 15:10:22'!
 cost
 	|catalog cost|
-	
-	cart isEmpty  ifTrue: [	self error: 'No me pases un cart vacio'.].
 
+	self isCartEmpty.
+	
 	catalog := cart catalog.
 	cost := 0.
 	(cart products) do:[:element | 
-								cost := cost + (catalog cost: element)
+								cost := cost + (catalog at: element)
 							 ].
 
 	^ cost.
@@ -842,34 +814,88 @@ withCart: aCart withCard: aCard withBook: anUndefinedObject
 	^ self new withCart: aCart withCard: aCard withBook: anUndefinedObject ! !
 
 
-!classDefinition: #Catalog category: #'TuLibro-Solution'!
-Object subclass: #Catalog
-	instanceVariableNames: 'elements'
+!classDefinition: #CreditCard category: #'TuLibro-Solution'!
+Object subclass: #CreditCard
+	instanceVariableNames: 'cardNumber cardHolder expirationMonth'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TuLibro-Solution'!
 
-!Catalog methodsFor: 'accessing' stamp: 'kf 6/13/2017 23:30:42'!
-contents
-	^ elements contents ! !
+!CreditCard methodsFor: 'accessing' stamp: 'kf 6/18/2017 11:19:47'!
+cardNumber
+	^ cardNumber ! !
 
-!Catalog methodsFor: 'accessing' stamp: 'kf 6/13/2017 23:31:56'!
-cost: anElement
-	^ elements at: anElement ! !
+!CreditCard methodsFor: 'accessing' stamp: 'F.O. 11/2/2017 14:56:33'!
+isExpired
 
-!Catalog methodsFor: 'accessing' stamp: 'kf 6/13/2017 23:26:51'!
-includes: anElement 
-	^ elements includesKey: anElement ! !
+|actualMonthYear|
+	
+	actualMonthYear := Month month: (Date today monthIndex ) year:  (Date today yearNumber ).
+	(expirationMonth yearNumber < actualMonthYear yearNumber) ifTrue: [^true].
+	((expirationMonth monthIndex < actualMonthYear monthIndex ) and: [expirationMonth yearNumber = actualMonthYear yearNumber]) ifTrue: [^true].
+
+^false! !
+
+!CreditCard methodsFor: 'accessing' stamp: 'F.O. 11/2/2017 14:56:40'!
+isExpiredOn: aDate
+	
+	(expirationMonth yearNumber < aDate yearNumber) ifTrue: [^true].
+	((expirationMonth monthIndex < aDate monthIndex ) and: [expirationMonth yearNumber = aDate yearNumber]) ifTrue: [^true].
+	^false! !
 
 
-!Catalog methodsFor: 'initialization' stamp: 'kf 6/13/2017 23:25:33'!
-initialize
-	elements := Dictionary new.! !
+!CreditCard methodsFor: 'initialization' stamp: 'F.O. 11/2/2017 14:57:48'!
+withNumber: acardNumber withName: acardHolder withExpirationMonth: amonthOfYear
+	cardNumber _ acardNumber.
+	cardHolder _ acardHolder.
+	expirationMonth _ amonthOfYear.! !
 
 
-!Catalog methodsFor: 'adding' stamp: 'kf 6/13/2017 23:25:04'!
-put: anElement withPrice: price 
-	elements at: anElement put: price.! !
+!CreditCard methodsFor: 'comparing' stamp: 'kf 6/18/2017 11:07:57'!
+= aCard
+
+	(aCard isKindOf: self class) ifFalse: [^false].
+	^ cardNumber = aCard cardNumber! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'CreditCard class' category: #'TuLibro-Solution'!
+CreditCard class
+	instanceVariableNames: ''!
+
+!CreditCard class methodsFor: 'instance creation' stamp: 'F.O. 11/2/2017 14:56:05'!
+withNumber: cardNumber withName: cardHolder withExpirationMonth: monthYear
+	self
+		assert: cardHolder isEmpty not
+		description: [ self error: CreditCard invalidName ].
+	self
+		assert: cardNumber decimalDigitLength = 12
+		description: [ self error: CreditCard invalidNumber ].
+	^ self new
+		withNumber: cardNumber
+		withName: cardHolder
+		withExpirationMonth: monthYear.! !
+
+
+!CreditCard class methodsFor: 'exceptions' stamp: 'RB 6/27/2017 17:26:19'!
+expiredError
+	^ 'La tarjeta expiro'.! !
+
+!CreditCard class methodsFor: 'exceptions' stamp: 'kf 6/18/2017 12:49:53'!
+invalidCard
+	^ 'Tarjeta invalida' ! !
+
+!CreditCard class methodsFor: 'exceptions' stamp: 'kf 6/22/2017 19:22:26'!
+invalidName
+	^ 'Nombre invalido'! !
+
+!CreditCard class methodsFor: 'exceptions' stamp: 'kf 6/22/2017 19:26:36'!
+invalidNumber
+	^ 'invalid number'! !
+
+!CreditCard class methodsFor: 'exceptions' stamp: 'kf 6/18/2017 12:50:30'!
+withoutBalance
+	^ 'Sin Saldo'! !
 
 
 !classDefinition: #Invoice category: #'TuLibro-Solution'!
@@ -887,10 +913,6 @@ elements
 total
 	^ total! !
 
-
-!Invoice methodsFor: 'initialization' stamp: 'kf 6/25/2017 12:14:04'!
-withElements: aBag 
-	elements := aBag .! !
 
 !Invoice methodsFor: 'initialization' stamp: 'kf 6/25/2017 12:23:43'!
 withElements: aBag withTotal: aTotal 
@@ -940,20 +962,21 @@ addValidCard: aCard withAmount: anAmount
 	amount := anAmount.! !
 
 
-!MerchantProcesorMock methodsFor: 'debit' stamp: 'kf 6/18/2017 13:05:47'!
-debit: amountToDebit withCard: aCard 
-
-	self assert: (outService not) description: [self error: MerchantProcesorMock 	outService ].
-
-	self assert: (aCard isExpiredOn: today) not description: [ self error:  Card expiredError ].
-
-	self assert: (card = aCard) description: [self error: Card invalidCard.].
-	
-	self assert: (amountToDebit < amount) description: [self error: Card withoutBalance] .
-	
-	
-	^ true.
-! !
+!MerchantProcesorMock methodsFor: 'debit' stamp: 'F.O. 11/2/2017 13:37:19'!
+debit: amountToDebit withCard: aCard
+	self
+		assert: outService not
+		description: [ self error: MerchantProcesorMock outService ].
+	self
+		assert: (aCard isExpiredOn: today) not
+		description: [ self error: CreditCard expiredError ].
+	self
+		assert: card = aCard
+		description: [ self error: CreditCard invalidCard ].
+	self
+		assert: amountToDebit < amount
+		description: [ self error: CreditCard withoutBalance ].
+	^ true.! !
 
 
 !MerchantProcesorMock methodsFor: 'initialization' stamp: 'kf 6/18/2017 16:48:44'!
@@ -1021,32 +1044,34 @@ validateUser: clientId withPassword: password
 	self assert: (dataLogin at: clientId  ifAbsent: [self error: Rest invalidUser ]) = password description: [self error: Rest invalidUser].! !
 
 
-!Rest methodsFor: 'checkout' stamp: 'KF 6/26/2017 23:24:17'!
+!Rest methodsFor: 'checkout' stamp: 'F.O. 11/2/2017 14:56:05'!
 checkout: cartId withNumberCard: numberCard withExpirationDate: anExpirationDate withNameHolder: aNameHolder
-
 	| aCart aCashier aCard |
-	
-	aCard := Card withNumber:  numberCard withName: aNameHolder withExpirationDate: anExpirationDate .
-	
-	aCart := self listCart: cartId.
-	
-	aCashier := Cashier withCart: aCart withCard: aCard withBook: book .
-	
-	transactions add: (aCashier checkOutOnDate: time withMerchant: merchant).
-	
+	aCard _ CreditCard
+		withNumber: numberCard
+		withName: aNameHolder
+		withExpirationMonth: anExpirationDate.
+	aCart _ self listCart: cartId.
+	aCashier _ Cashier
+		withCart: aCart
+		withCard: aCard
+		withBook: book.
+	transactions add:
+		(aCashier
+			checkOutOnDate: time
+			withMerchant: merchant).
 	cartsCheckout add: cartId.
-	
-	^ transactions size.
-! !
+	^ transactions size.! !
 
 
-!Rest methodsFor: 'accessing' stamp: 'KF 6/27/2017 00:55:02'!
+!Rest methodsFor: 'accessing' stamp: 'F.O. 11/2/2017 15:17:40'!
 listCart: idCart
 
 	(cartsCheckout includes: idCart  ) ifTrue: [self error: Rest invalidCart].
 	(((actionsCarts at:idCart ifAbsent: [self error: Rest invalidCart] ) + 30 minutes) < time) ifTrue: [self error: Rest timeExpired].
 	self updateTimeCart: idCart .	
-	[ ^carts at: idCart .] on: Error do: [self error: Rest invalidCart ].! !
+	"[ ^carts at: idCart .] on: Error do: [self error: Rest invalidCart ]."
+	^carts at: idCart ! !
 
 !Rest methodsFor: 'accessing' stamp: 'KF 6/26/2017 23:00:44'!
 listCarts
